@@ -21,13 +21,13 @@ A modern, elegant Laravel SDK for the [Ortto](https://ortto.com) Customer Data P
 Install the package via Composer:
 
 ```bash
-composer require nunomaduro/ortto-sdk
+composer require phpdevkits/ortto-sdk
 ```
 
 Publish the configuration file:
 
 ```bash
-php artisan vendor:publish --provider="NunoMaduro\OrttoSdk\OrttoServiceProvider"
+php artisan vendor:publish --provider="PhpDevKits\Ortto\OrttoServiceProvider"
 ```
 
 Add your Ortto API credentials to your `.env` file:
@@ -60,7 +60,7 @@ Ortto uses region-specific endpoints:
 ### People Management
 
 ```php
-use NunoMaduro\OrttoSdk\Facades\Ortto;
+use PhpDevKits\Ortto\Facades\Ortto;
 
 // Create or update a person
 Ortto::people()->merge([
@@ -111,7 +111,7 @@ For detailed information about available endpoints and parameters, refer to the 
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/nunomaduro/ortto-sdk.git
+git clone https://github.com/phpdevkits/ortto-sdk.git
 cd ortto-sdk
 composer install
 ```

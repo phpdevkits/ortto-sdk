@@ -1,12 +1,12 @@
 {
-    "name": "nunomaduro/skeleton-php",
-    "description": "A skeleton repository for my packages",
-    "keywords": ["php", "skeleton", "package"],
+    "name": "phpdevkits/ortto-sdk",
+    "description": "A modern Laravel SDK for the Ortto Customer Data Platform API",
+    "keywords": ["laravel", "ortto", "sdk", "api", "cdp", "customer-data-platform", "saloon"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Nuno Maduro",
-            "email": "enunomaduro@gmail.com"
+            "name": "Francisco Barrento",
+            "email": "francisco.barrento@barrento.com"
         }
     ],
     "require": {
@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "NunoMaduro\\SkeletonPhp\\": "src/"
+            "PhpDevKits\\Ortto\\": "src/"
         }
     },
     "autoload-dev": {
