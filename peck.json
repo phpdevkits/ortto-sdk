@@ -1,0 +1,13 @@
+{
+    "preset": "base",
+    "ignore": {
+        "words": [
+            "php",
+            "ortto",
+            "sdk",
+            "filesystems",
+            "favicon",
+            "js"
+        ]
+    }
+}
