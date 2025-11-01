@@ -1,9 +1,9 @@
 {
-    "statusCode": 200,
+    "statusCode": 400,
     "headers": {
-        "Date": "Sat, 01 Nov 2025 14:49:28 GMT",
+        "Date": "Sat, 01 Nov 2025 14:58:22 GMT",
         "Content-Type": "application\/json",
-        "Content-Length": "73",
+        "Content-Length": "190",
         "Connection": "keep-alive",
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
         "Access-Control-Allow-Origin": "*",
@@ -11,6 +11,6 @@
         "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
         "X-Version": "master-2510290108-1776-2eac27c"
     },
-    "data": "{\"people\":[{\"person_id\":\"0069061df82dad244f13a400\",\"status\":\"created\"}]}\n",
+    "data": "{\"request_id\":\"16cd385a-8eaa-47fd-a3a2-41811301b3c1\",\"code\":400,\"error\":\"No valid contacts provided (Email is suppressed)\",\"details\":[{\"status\":\"suppressed\",\"error\":\"Email is suppressed\"}]}\n",
     "context": []
 }

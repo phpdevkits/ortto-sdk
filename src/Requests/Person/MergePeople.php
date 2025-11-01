@@ -17,19 +17,22 @@ class MergePeople extends Request implements HasBody
 
     /**
      * @param  array<string, array<string, mixed>>  $people
-     * @param  string[]  $mergedBy
+     * @param  string[]  $mergeBy
      */
     public function __construct(
         protected array $people,
-        protected array $mergedBy,
+        protected array $mergeBy,
         protected int|MergeStrategy $mergeStrategy,
         protected int|FindStrategy $findStrategy,
         protected ?string $suppressionListFieldId = null,
         protected bool $skipNonExisting = false,
-        protected bool $async = false
+        protected bool $async = false,
+        protected bool $skipSuppressionCheck = false
     ) {
 
-        if (! $this->suppressionListFieldId) {
+        if ($this->skipSuppressionCheck) {
+            $this->suppressionListFieldId = null;
+        } elseif (! $this->suppressionListFieldId) {
             /** @var string|null $suppressionListFieldId */
             $suppressionListFieldId = config('ortto.suppression_list_field_id');
             $this->suppressionListFieldId = $suppressionListFieldId;
@@ -48,7 +51,7 @@ class MergePeople extends Request implements HasBody
     {
         return [
             'people' => $this->people,
-            'merged_by' => $this->mergedBy,
+            'merge_by' => $this->mergeBy,
             'merge_strategy' => is_int($this->mergeStrategy) ? $this->mergeStrategy : $this->mergeStrategy->value,
             'find_strategy' => is_int($this->findStrategy) ? $this->findStrategy : $this->findStrategy->value,
             'suppression_list_field_id' => $this->suppressionListFieldId,
