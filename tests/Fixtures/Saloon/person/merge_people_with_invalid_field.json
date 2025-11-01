@@ -1,0 +1,16 @@
+{
+    "statusCode": 400,
+    "headers": {
+        "Date": "Sat, 01 Nov 2025 13:12:56 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "411",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2510290108-1776-2eac27c"
+    },
+    "data": "{\"request_id\":\"d6b767f0-d806-4f49-b8b9-faa2e051a18b\",\"code\":400,\"error\":\"No valid contacts provided (failed to validate field str::invalid_field_that_does_not_exist in schema: str::invalid_field_that_does_not_exist: Object not found)\",\"details\":[{\"status\":\"invalid\",\"error\":\"failed to validate field str::invalid_field_that_does_not_exist in schema: str::invalid_field_that_does_not_exist: Object not found\"}]}\n",
+    "context": []
+}

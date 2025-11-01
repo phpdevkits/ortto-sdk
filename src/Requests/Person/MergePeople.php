@@ -24,10 +24,17 @@ class MergePeople extends Request implements HasBody
         protected array $mergedBy,
         protected int|MergeStrategy $mergeStrategy,
         protected int|FindStrategy $findStrategy,
-        protected string $suppressionListFieldId,
+        protected ?string $suppressionListFieldId = null,
         protected bool $skipNonExisting = false,
         protected bool $async = false
-    ) {}
+    ) {
+
+        if (! $this->suppressionListFieldId) {
+            /** @var string|null $configValue */
+            $configValue = config('ortto.suppression_list_field_id');
+            $this->suppressionListFieldId = $configValue;
+        }
+    }
 
     public function resolveEndpoint(): string
     {
