@@ -12,6 +12,47 @@ beforeEach(function (): void {
     $this->ortto = new Ortto;
 });
 
+test('merge with suppressed email skips contact creation',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+
+        $person = Person::factory()
+            ->state(['str::email' => 'francisco.barrento@gmail.com'])
+            ->make();
+
+        $mockClient = new MockClient([
+            MergePeople::class => MockResponse::fixture('person/merge_people_with_suppressed_email'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->send(
+                new MergePeople(
+                    people: [
+                        $person->toArray(),
+                    ],
+                    mergedBy: ['str::email'],
+                    mergeStrategy: MergeStrategy::OverwriteExisting->value,
+                    findStrategy: FindStrategy::All->value,
+                    suppressionListFieldId: 'str::email'
+                ),
+            );
+
+        expect($response->status())
+            ->toBe(400)
+            ->and($response->json())
+            ->toHaveKey('details')
+            ->and($response->json('details'))
+            ->toBeArray()
+            ->and($response->json('details.0.status'))
+            ->toBe('suppressed')
+            ->and($response->json('details.0.error'))
+            ->toBe('Email is suppressed');
+
+    });
+
 test('merge with invalid field returns error',
     /**
      * @throws Throwable

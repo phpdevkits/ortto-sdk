@@ -30,9 +30,9 @@ class MergePeople extends Request implements HasBody
     ) {
 
         if (! $this->suppressionListFieldId) {
-            /** @var string|null $configValue */
-            $configValue = config('ortto.suppression_list_field_id');
-            $this->suppressionListFieldId = $configValue;
+            /** @var string|null $suppressionListFieldId */
+            $suppressionListFieldId = config('ortto.suppression_list_field_id');
+            $this->suppressionListFieldId = $suppressionListFieldId;
         }
     }
 
