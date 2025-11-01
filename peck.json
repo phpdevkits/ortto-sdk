@@ -9,7 +9,9 @@
             "favicon",
             "js",
             "integrations",
-            "testbench"
+            "testbench",
+            "asc",
+            "desc"
         ],
         "paths": [
             "docs"

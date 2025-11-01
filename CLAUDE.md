@@ -81,6 +81,27 @@ The SDK targets these Ortto API base URLs:
 
 Refer to [Ortto API Documentation](https://help.ortto.com/developer/latest/) for endpoint details.
 
+### Ortto API Documentation
+
+Ortto API endpoint documentation is stored locally in the `.ai/ortto/` directory:
+- Documentation is organized by resource/entity (e.g., `person/`, `activity/`, `campaign/`)
+- Each endpoint has its own markdown file within the resource subfolder
+- File naming follows the endpoint name (e.g., `get.md`, `merge.md`, `delete.md`)
+- Example structure:
+  ```
+  .ai/ortto/
+  ├── person/
+  │   ├── get.md
+  │   ├── merge.md
+  │   └── delete.md
+  ├── activity/
+  │   └── create.md
+  └── campaign/
+      └── send.md
+  ```
+
+When implementing or modifying SDK endpoints, always refer to the corresponding documentation file in `.ai/ortto/` for accurate API specifications, request/response formats, and field definitions.
+
 ## Code Quality Standards
 
 ### PHPStan Configuration
