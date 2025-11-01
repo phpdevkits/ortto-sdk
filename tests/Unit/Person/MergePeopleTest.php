@@ -1,38 +1,41 @@
 <?php
 
-use Illuminate\Support\Str;
+use PhpDevKits\Ortto\Data\Person;
 use PhpDevKits\Ortto\Enums\FindStrategy;
 use PhpDevKits\Ortto\Enums\MergeStrategy;
 use PhpDevKits\Ortto\Ortto;
 use PhpDevKits\Ortto\Requests\Person\MergePeople;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
 
 beforeEach(function (): void {
     $this->ortto = new Ortto;
 });
 
-test('merge people on ortto',
+test('people are merged successfully',
     /**
      * @throws Throwable
      */
     function (): void {
 
-        $response = $this->ortto->send(
-            new MergePeople(
-                people: [
-                    ['fields' => [
-                        'str::ei' => Str::uuid()->toString(),
-                        'str::email' => fake()->email,
-                        'str::first' => $first = fake()->firstName(),
-                        'str::last' => $last = fake()->lastName(),
-                        'str::name' => "$first $last",
-                    ]],
-                ],
-                mergedBy: ['str::email'],
-                mergeStrategy: MergeStrategy::OverwriteExisting->value,
-                findStrategy: FindStrategy::All->value,
-                suppressionListFieldId: 'str::email'
-            ),
-        );
+        $person = Person::factory()->make();
+
+        $mockClient = new MockClient([
+            MergePeople::class => MockResponse::fixture('person/merge_people_ok'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)->send(
+                new MergePeople(
+                    people: [
+                        $person->toArray(),
+                    ],
+                    mergedBy: ['str::email'],
+                    mergeStrategy: MergeStrategy::OverwriteExisting->value,
+                    findStrategy: FindStrategy::All->value,
+                    suppressionListFieldId: 'str::email'
+                ),
+            );
 
         expect($response->status())
             ->toBe(200)
