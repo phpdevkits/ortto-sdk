@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Sat, 01 Nov 2025 18:22:20 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "313",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2510290108-1776-2eac27c"
+    },
+    "data": "{\"contacts\":[{\"id\":\"006906455e1424390bc31f00\",\"fields\":{\"str::email\":\"john.append@example.com\",\"str::first\":\"John\",\"str::last\":\"Doe\"}}],\"meta\":{\"total_contacts\":12,\"total_organizations\":0,\"total_matches\":1,\"total_subscribers\":0},\"offset\":0,\"next_offset\":1,\"cursor_id\":\"0069064fdc8ab27366e03534\",\"has_more\":false}\n",
+    "context": []
+}

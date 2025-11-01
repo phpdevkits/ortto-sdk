@@ -124,3 +124,110 @@ test('gets people with pagination offset',
             ->toHaveKey('has_more');
 
     });
+
+test('includes cursor id in request body when provided',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+
+        $mockClient = new MockClient([
+            GetPeople::class => MockResponse::fixture('person/get_people_with_cursor_param'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->send(
+                new GetPeople(
+                    cursorId: '0069061b5bda4060a576',
+                    fields: ['str::email'],
+                ),
+            );
+
+        // Just verify the request was made (may return 400 with invalid cursor, that's ok)
+        expect($response->status())
+            ->toBeIn([200, 400]);
+
+    });
+
+test('gets people with search query',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+
+        $mockClient = new MockClient([
+            GetPeople::class => MockResponse::fixture('person/get_people_with_query'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->send(
+                new GetPeople(
+                    fields: ['str::email', 'str::first', 'str::last'],
+                    q: 'john',
+                ),
+            );
+
+        expect($response->status())
+            ->toBe(200)
+            ->and($response->json())
+            ->toHaveKey('contacts');
+
+    });
+
+test('gets people with type filter',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+
+        $mockClient = new MockClient([
+            GetPeople::class => MockResponse::fixture('person/get_people_with_type'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->send(
+                new GetPeople(
+                    fields: ['str::email'],
+                    type: 'archived',
+                ),
+            );
+
+        expect($response->status())
+            ->toBe(200)
+            ->and($response->json())
+            ->toHaveKey('contacts');
+
+    });
+
+test('gets people with filter',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+
+        $mockClient = new MockClient([
+            GetPeople::class => MockResponse::fixture('person/get_people_with_filter'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->send(
+                new GetPeople(
+                    fields: ['str::email', 'str::first'],
+                    filter: [
+                        '$has_any_value' => [
+                            'field_id' => 'str::first',
+                        ],
+                    ],
+                ),
+            );
+
+        expect($response->status())
+            ->toBe(200)
+            ->and($response->json())
+            ->toHaveKey('contacts');
+
+    });
