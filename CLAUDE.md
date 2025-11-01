@@ -127,7 +127,7 @@ Applies the following preset rule sets to `src/` and `tests/`:
 - Tests written in PEST framework
 
 ### Peck Typo Checking
-Ignored words: php, ortto, sdk, filesystems, favicon, js
+Ignored words: php, ortto, sdk, filesystems, favicon, js, integrations, testbench, asc, desc, param
 
 ## Package Namespace
 
@@ -146,3 +146,74 @@ When implementing new Ortto API endpoints:
 5. Ensure 100% test coverage with PEST tests in `tests/`
 6. Use type-safe arrays and DTOs for request/response data
 7. Follow Saloon best practices for authentication, middleware, and error handling
+
+### Testing with Saloon MockClient
+
+Tests use Saloon's `MockClient` to mock HTTP responses:
+
+```php
+$mockClient = new MockClient([
+    MergePeople::class => MockResponse::fixture('person/merge_people_ok'),
+]);
+
+$response = $this->ortto
+    ->withMockClient($mockClient)
+    ->send(new MergePeople(...));
+```
+
+**Fixture Auto-Recording**: When a fixture doesn't exist, MockClient automatically:
+1. Makes a real API call to Ortto
+2. Records the response as a JSON fixture in `tests/Fixtures/Saloon/`
+3. Uses the recorded fixture for subsequent test runs
+
+**Test Organization**:
+- New tests should be placed **after** `beforeEach`/`afterEach` hooks but **before** older tests
+- Newest tests first, oldest tests last (reverse chronological order)
+- Use descriptive test names in snake_case
+- Fixture names should match test purpose
+
+### Ortto API Field Requirements
+
+**Person Entity Fields**:
+- Built-in fields use format: `{type}::{field}` (e.g., `str::email`, `str::first`)
+- Custom fields use format: `{type}:cm:{field}` (e.g., `str:cm:job-title`)
+- Custom fields must be created in Ortto CDP before use in tests
+
+**GetPeople/GetPeopleByIds Requirements**:
+- `fields` parameter is **required** (min: 1)
+- GetPeople: max 100 fields
+- GetPeopleByIds: max 20 fields
+- GetPeopleByIds returns contacts as **object keyed by person_id**, not array
+
+**MergePeople Behavior**:
+- Field name in request body: `merge_by` (NOT `merged_by`)
+- Status responses: `"created"` (new contact) or `"merged"` (updated existing)
+- Suppression list only blocks **NEW** contact creation, NOT updates to existing contacts
+- `skipSuppressionCheck: true` bypasses suppression list entirely
+
+### Data Classes and Factories
+
+**Person Data Class** (`src/Data/Person.php`):
+- Implements `Arrayable` interface
+- Has factory support via `PersonFactory`
+- `toArray()` returns `['fields' => $this->fields]` structure for API requests
+
+**PersonFactory** (`tests/Factories/PersonFactory.php`):
+- Custom factory (not Eloquent-based)
+- Use `state()` method to override default fields
+- Generates: `str::ei` (UUID), `str::email`, `str::first`, `str::last`, `str::name`
+
+### Implemented Endpoints
+
+**Person Entity**:
+- `MergePeople` (`POST /person/merge`) - Create or update people
+  - Parameters: people, mergeBy, mergeStrategy, findStrategy, suppressionListFieldId, skipNonExisting, async, skipSuppressionCheck
+  - Enums: `MergeStrategy` (AppendOnly=1, OverwriteExisting=2, Ignore=3), `FindStrategy` (Any=0, NextOnlyIfPreviousEmpty=1, All=2)
+
+- `GetPeople` (`POST /person/get`) - Retrieve people with filters/pagination
+  - Parameters: limit, sortByFieldId, sortOrder, offset, cursorId, fields (required), q, type, filter
+  - Enums: `SortOrder` (Asc, Desc)
+
+- `GetPeopleByIds` (`POST /person/get-by-ids`) - Retrieve specific people by IDs
+  - Parameters: contactIds (required), fields (required)
+  - Response: contacts keyed by person_id
