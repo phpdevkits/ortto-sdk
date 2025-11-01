@@ -7,7 +7,12 @@
             "sdk",
             "filesystems",
             "favicon",
-            "js"
+            "js",
+            "integrations",
+            "testbench"
+        ],
+        "paths": [
+            "docs"
         ]
     }
 }
