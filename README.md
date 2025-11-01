@@ -177,8 +177,19 @@ If you discover any security-related issues, please email security@example.com i
 
 ## Credits
 
-- Built with [Saloon](https://docs.saloon.dev/)
-- Ortto API documentation: [https://help.ortto.com](https://help.ortto.com)
+This package is built with modern PHP tools and frameworks:
+
+- **[Laravel](https://laravel.com/)** - The PHP framework for web artisans
+- **[Saloon](https://docs.saloon.dev/)** - Build beautiful API integrations
+- **[Pest PHP](https://pestphp.com/)** - An elegant PHP testing framework
+- **[Lawman](https://github.com/JonPurvis/lawman)** - Architecture testing for Saloon
+- **[PHPStan](https://phpstan.org/)** - PHP static analysis tool
+- **[Laravel Pint](https://laravel.com/docs/pint)** - PHP code style fixer
+- **[Rector](https://getrector.com/)** - Instant upgrades and automated refactoring
+
+Special thanks to:
+- [Ortto](https://ortto.com) for their Customer Data Platform API
+- [Ortto API Documentation](https://help.ortto.com/developer/latest/)
 
 ## License
 
