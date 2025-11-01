@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Sat, 01 Nov 2025 18:04:02 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "1798",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2510290108-1776-2eac27c"
+    },
+    "data": "{\"contacts\":[{\"id\":\"00690646665c94874b98c100\",\"fields\":{\"str::email\":\"existing.ignore@example.com\",\"str::first\":\"Updated\",\"str::last\":\"Upton\"}},{\"id\":\"00690646658ab27366dcd500\",\"fields\":{\"str::email\":\"new.ignore@example.com\",\"str::first\":\"New\",\"str::last\":\"Contact\"}},{\"id\":\"0069064664da4060a5845d00\",\"fields\":{\"str::email\":\"new.overwrite@example.com\",\"str::first\":\"New\",\"str::last\":\"Contact\"}},{\"id\":\"00690646645c94874b98be00\",\"fields\":{\"str::email\":\"clear.field@example.com\",\"str::first\":\"Lilly\",\"str::last\":\"Blanda\"}},{\"id\":\"00690646645c94874b98bb00\",\"fields\":{\"str::email\":\"existing.overwrite@example.com\",\"str::first\":\"Updated\",\"str::last\":\"Bruen\"}},{\"id\":\"00690646635c94874b98b800\",\"fields\":{\"str::email\":\"existing.append@example.com\",\"str::first\":\"Updated\",\"str::last\":\"Wolff\"}},{\"id\":\"006906455e1424390bc31f00\",\"fields\":{\"str::email\":\"john.append@example.com\",\"str::first\":\"John\",\"str::last\":\"Doe\"}},{\"id\":\"0069061df82dad244f13a400\",\"fields\":{\"str::email\":\"lorine.thompson@hotmail.com\",\"str::first\":\"Cassidy\",\"str::last\":\"Kautzer\"}},{\"id\":\"0069061b5c1424390bb3d600\",\"fields\":{\"str::email\":\"jwisoky@yahoo.com\",\"str::first\":\"Annie\",\"str::last\":\"Kuhlman\"}},{\"id\":\"0069061b5bda4060a5765300\",\"fields\":{\"str::email\":\"test.update@example.com\",\"str::first\":\"Jane\",\"str::last\":\"Smith\"}},{\"id\":\"0069060ada702943471b8400\",\"fields\":{\"idt::o\":\"106904f4fd2dad244ea03100\",\"str::email\":\"sonia.correia@gmail.com\",\"str::first\":\"S\u00f3nia\",\"str::last\":\"Correia\"}},{\"id\":\"006904f4fc5c94874b0f6400\",\"fields\":{\"idt::o\":\"106904f4fd2dad244ea03100\",\"str::email\":\"francisco.barrento@gmail.com\",\"str::first\":\"Betsy\",\"str::last\":\"Wehner\"}}],\"meta\":{\"total_contacts\":12,\"total_organizations\":0,\"total_matches\":12,\"total_subscribers\":11},\"offset\":0,\"next_offset\":12,\"cursor_id\":\"0069064b921424390bc50e0d\",\"has_more\":false}\n",
+    "context": []
+}

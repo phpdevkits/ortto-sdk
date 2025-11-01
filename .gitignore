@@ -9,3 +9,4 @@
 *.swp
 *.swo
 .env
+.claude/settings.local.json
