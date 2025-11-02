@@ -1,17 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Factories;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use PhpDevKits\Ortto\Data\PersonData;
 
-class PersonFactory
+use function collect;
+use function fake;
+
+final class PersonFactory
 {
     /**
      * @var array<string, mixed>
      */
     protected array $state = [];
+
+    protected int $count = 0;
 
     /**
      * Create a new factory instance.
@@ -35,8 +43,25 @@ class PersonFactory
 
     /**
      * Create a single instance.
+     *
+     * @return PersonData|Collection<int, PersonData>
      */
-    public function make(): PersonData
+    public function make(): PersonData|Collection
+    {
+        if ($this->count === 0) {
+            return $this->createPerson();
+        }
+
+        $instances = collect([]);
+
+        foreach (range(0, $this->count - 1) as $_) {
+            $instances->add($this->createPerson());
+        }
+
+        return $instances;
+    }
+
+    private function createPerson(): PersonData
     {
         $firstName = fake()->firstName();
         $lastName = fake()->lastName();
@@ -57,18 +82,21 @@ class PersonFactory
     }
 
     /**
-     * Create multiple instances.
-     *
-     * @return array<int, PersonData>
+     * @return Collection<int, PersonData>
      */
-    public function count(int $count): array
+    public function all(): Collection
     {
-        $instances = [];
+        return collect($this->instances);
+    }
 
-        for ($i = 0; $i < $count; $i++) {
-            $instances[] = $this->make();
-        }
+    /**
+     * Create multiple instances.
+     */
+    public function count(int $count): PersonFactory
+    {
 
-        return $instances;
+        $this->count = $count;
+
+        return $this;
     }
 }
