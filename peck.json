@@ -12,7 +12,8 @@
             "testbench",
             "asc",
             "desc",
-            "param"
+            "param",
+            "birthdate"
         ],
         "paths": [
             "docs"
