@@ -25,6 +25,11 @@ final class PersonFactory extends Factory
      */
     protected $model = PersonData::class;
 
+    /**
+     * @var array<string, mixed>
+     */
+    private array $extraAttributes = [];
+
     public function definition(): array
     {
         return [
@@ -41,11 +46,6 @@ final class PersonFactory extends Factory
             'smsPermission' => fake()->boolean(),
         ];
     }
-
-    /**
-     * @var array<string, mixed>
-     */
-    private array $extraAttributes = [];
 
     /**
      * Override make to handle non-Eloquent PersonData.
