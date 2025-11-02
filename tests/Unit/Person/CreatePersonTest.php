@@ -20,13 +20,11 @@ test('person is created when email does not exist',
      */
     function (): void {
 
-        $person = PersonData::factory()
-            ->state([
-                'email' => 'test.create@example.com',
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-            ])
-            ->make();
+        $person = PersonData::factory()->make([
+            'email' => 'test.create@example.com',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+        ]);
 
         $mockClient = new MockClient([
             MergePeople::class => MockResponse::fixture('person/merge_people_created'),

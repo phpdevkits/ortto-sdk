@@ -5,98 +5,88 @@ declare(strict_types=1);
 namespace Tests\Factories;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use PhpDevKits\Ortto\Data\PersonData;
 
-use function collect;
 use function fake;
 
-final class PersonFactory
+/**
+ * @extends Factory<PersonData>
+ */
+final class PersonFactory extends Factory
 {
+    /**
+     * The name of the factory's corresponding data object.
+     *
+     * @var class-string<PersonData>
+     */
+    protected $model = PersonData::class;
+
+    public function definition(): array
+    {
+        return [
+            'id' => Str::uuid()->toString(),
+            'email' => fake()->unique()->email(),
+            'firstName' => fake()->firstName(),
+            'lastName' => fake()->lastName(),
+            'name' => fake()->name(),
+            'city' => fake()->city(),
+            'country' => fake()->country(),
+            'postalCode' => fake()->postcode(),
+            'birthdate' => CarbonImmutable::now(),
+            'emailPermission' => fake()->boolean(),
+            'smsPermission' => fake()->boolean(),
+        ];
+    }
+
     /**
      * @var array<string, mixed>
      */
-    protected array $state = [];
-
-    protected int $count = 0;
+    private array $extraAttributes = [];
 
     /**
-     * Create a new factory instance.
-     */
-    public static function new(): self
-    {
-        return new self;
-    }
-
-    /**
-     * Set the state of the factory.
+     * Override make to handle non-Eloquent PersonData.
      *
-     * @param  array<string, mixed>  $state
-     */
-    public function state(array $state): self
-    {
-        $this->state = array_merge($this->state, $state);
-
-        return $this;
-    }
-
-    /**
-     * Create a single instance.
-     *
+     * @param  array<string, mixed>  $attributes
      * @return PersonData|Collection<int, PersonData>
      */
-    public function make(): PersonData|Collection
+    public function make($attributes = [], ?Model $parent = null): PersonData|Collection
     {
-        if ($this->count === 0) {
-            return $this->createPerson();
+        $this->extraAttributes = $attributes;
+
+        if ($this->count === null) {
+            return $this->makeInstance($parent);
         }
 
-        $instances = collect([]);
+        $instances = [];
 
-        foreach (range(0, $this->count - 1) as $_) {
-            $instances->add($this->createPerson());
+        for ($i = 0; $i < $this->count; $i++) {
+            $instances[] = $this->makeInstance($parent);
         }
 
-        return $instances;
+        return collect($instances);
     }
 
-    private function createPerson(): PersonData
+    /**
+     * Make a single instance.
+     */
+    protected function makeInstance(?Model $parent = null): PersonData
     {
-        $firstName = fake()->firstName();
-        $lastName = fake()->lastName();
-
-        return new PersonData(
-            id: $this->state['id'] ?? Str::uuid()->toString(),
-            email: fake()->unique()->email(),
-            firstName: $this->state['first_name'] ?? $firstName,
-            lastName: $this->state['last_name'] ?? $lastName,
-            name: $this->state['name'] ?? "{$firstName} {$lastName}",
-            city: $this->state['city'] ?? fake()->city(),
-            country: $this->state['country'] ?? fake()->country(),
-            postalCode: $this->state['postal_code'] ?? fake()->postcode(),
-            birthdate: $this->state['birthdate'] ?? CarbonImmutable::now(),
-            emailPermission: $this->state['email_permission'] ?? fake()->boolean(),
-            smsPermission: $this->state['sms_permission'] ?? fake()->boolean(),
+        $attributes = array_merge(
+            $this->getRawAttributes($parent),
+            $this->extraAttributes
         );
+
+        return new PersonData(...$attributes);
     }
 
-    /**
-     * @return Collection<int, PersonData>
-     */
-    public function all(): Collection
+    public function newModel(array $attributes = []): PersonData
     {
-        return collect($this->instances);
-    }
+        $attributes = array_merge($this->definition(), $attributes);
 
-    /**
-     * Create multiple instances.
-     */
-    public function count(int $count): PersonFactory
-    {
-
-        $this->count = $count;
-
-        return $this;
+        return new PersonData(...$attributes);
     }
 }

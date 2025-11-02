@@ -18,9 +18,9 @@ test('suppressed email is blocked when creating new contact',
      */
     function (): void {
 
-        $person = PersonData::factory()
-            ->state(['email' => 'test.suppressed@example.com'])
-            ->make();
+        $person = PersonData::factory()->make([
+            'email' => 'test.suppressed@example.com',
+        ]);
 
         $mockClient = new MockClient([
             MergePeople::class => MockResponse::fixture('person/merge_people_suppressed_blocked'),
@@ -59,9 +59,9 @@ test('suppressed email is merged when contact already exists',
      */
     function (): void {
 
-        $person = PersonData::factory()
-            ->state(['email' => 'francisco.barrento@gmail.com'])
-            ->make();
+        $person = PersonData::factory()->make([
+            'email' => 'francisco.barrento@gmail.com',
+        ]);
 
         $mockClient = new MockClient([
             MergePeople::class => MockResponse::fixture('person/merge_people_suppressed_existing'),
@@ -102,9 +102,9 @@ test('merge with suppressed email succeeds when suppression check skipped',
      */
     function (): void {
 
-        $person = PersonData::factory()
-            ->state(['email' => 'francisco.barrento@gmail.com'])
-            ->make();
+        $person = PersonData::factory()->make([
+            'email' => 'francisco.barrento@gmail.com',
+        ]);
 
         $mockClient = new MockClient([
             MergePeople::class => MockResponse::fixture('person/merge_people_suppressed_email_without_check'),

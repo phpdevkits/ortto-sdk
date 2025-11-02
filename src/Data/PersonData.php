@@ -6,6 +6,7 @@ namespace PhpDevKits\Ortto\Data;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Collection;
 use Tests\Factories\PersonFactory;
 
 /**
@@ -66,5 +67,14 @@ class PersonData implements Arrayable
                 'bol::p' => $this->emailPermission,
                 'bol::sp' => $this->smsPermission,
             ]];
+    }
+
+    /**
+     * @param  array<int, PersonData>  $items
+     * @return Collection<int, PersonData>
+     */
+    public function newCollection(array $items = []): Collection
+    {
+        return new Collection($items);
     }
 }

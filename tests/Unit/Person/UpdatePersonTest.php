@@ -18,13 +18,11 @@ test('person is merged when email already exists',
      */
     function (): void {
 
-        $person = PersonData::factory()
-            ->state([
-                'email' => 'test.update@example.com',
-                'first' => 'Jane',
-                'last' => 'Smith',
-            ])
-            ->make();
+        $person = PersonData::factory()->make([
+            'email' => 'test.update@example.com',
+            'firstName' => 'Jane',
+            'lastName' => 'Smith',
+        ]);
 
         $mockClient = new MockClient([
             MergePeople::class => MockResponse::fixture('person/merge_people_merged'),
