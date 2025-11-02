@@ -2,8 +2,9 @@
 
 namespace Tests\Factories;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Str;
-use PhpDevKits\Ortto\Data\Person;
+use PhpDevKits\Ortto\Data\PersonData;
 
 class PersonFactory
 {
@@ -35,26 +36,30 @@ class PersonFactory
     /**
      * Create a single instance.
      */
-    public function make(): Person
+    public function make(): PersonData
     {
         $firstName = fake()->firstName();
         $lastName = fake()->lastName();
 
-        $fields = array_merge([
-            'str::ei' => Str::uuid()->toString(),
-            'str::email' => fake()->email(),
-            'str::first' => $firstName,
-            'str::last' => $lastName,
-            'str::name' => "{$firstName} {$lastName}",
-        ], $this->state);
-
-        return new Person($fields);
+        return new PersonData(
+            id: $this->state['id'] ?? Str::uuid()->toString(),
+            email: fake()->unique()->email(),
+            firstName: $this->state['first_name'] ?? $firstName,
+            lastName: $this->state['last_name'] ?? $lastName,
+            name: $this->state['name'] ?? "{$firstName} {$lastName}",
+            city: $this->state['city'] ?? fake()->city(),
+            country: $this->state['country'] ?? fake()->country(),
+            postalCode: $this->state['postal_code'] ?? fake()->postcode(),
+            birthdate: $this->state['birthdate'] ?? CarbonImmutable::now(),
+            emailPermission: $this->state['email_permission'] ?? fake()->boolean(),
+            smsPermission: $this->state['sms_permission'] ?? fake()->boolean(),
+        );
     }
 
     /**
      * Create multiple instances.
      *
-     * @return array<int, Person>
+     * @return array<int, PersonData>
      */
     public function count(int $count): array
     {

@@ -1,6 +1,6 @@
 <?php
 
-use PhpDevKits\Ortto\Data\Person;
+use PhpDevKits\Ortto\Data\PersonData;
 use PhpDevKits\Ortto\Enums\FindStrategy;
 use PhpDevKits\Ortto\Enums\MergeStrategy;
 use PhpDevKits\Ortto\Ortto;
@@ -18,11 +18,11 @@ test('person is created when email does not exist',
      */
     function (): void {
 
-        $person = Person::factory()
+        $person = PersonData::factory()
             ->state([
-                'str::email' => 'test.create@example.com',
-                'str::first' => 'John',
-                'str::last' => 'Doe',
+                'email' => 'test.create@example.com',
+                'first_name' => 'John',
+                'last_name' => 'Doe',
             ])
             ->make();
 
@@ -64,11 +64,11 @@ test('person is merged when email already exists',
      */
     function (): void {
 
-        $person = Person::factory()
+        $person = PersonData::factory()
             ->state([
-                'str::email' => 'test.update@example.com',
-                'str::first' => 'Jane',
-                'str::last' => 'Smith',
+                'email' => 'test.update@example.com',
+                'first' => 'Jane',
+                'last' => 'Smith',
             ])
             ->make();
 
@@ -110,8 +110,8 @@ test('merge with suppressed email succeeds when suppression check skipped',
      */
     function (): void {
 
-        $person = Person::factory()
-            ->state(['str::email' => 'francisco.barrento@gmail.com'])
+        $person = PersonData::factory()
+            ->state(['email' => 'francisco.barrento@gmail.com'])
             ->make();
 
         $mockClient = new MockClient([
@@ -153,8 +153,8 @@ test('suppressed email is blocked when creating new contact',
      */
     function (): void {
 
-        $person = Person::factory()
-            ->state(['str::email' => 'test.suppressed@example.com'])
+        $person = PersonData::factory()
+            ->state(['email' => 'test.suppressed@example.com'])
             ->make();
 
         $mockClient = new MockClient([
@@ -194,8 +194,8 @@ test('suppressed email is merged when contact already exists',
      */
     function (): void {
 
-        $person = Person::factory()
-            ->state(['str::email' => 'francisco.barrento@gmail.com'])
+        $person = PersonData::factory()
+            ->state(['email' => 'francisco.barrento@gmail.com'])
             ->make();
 
         $mockClient = new MockClient([
@@ -237,20 +237,22 @@ test('merge with invalid field returns error',
      */
     function (): void {
 
-        $person = Person::factory()
-            ->state(['str::invalid_field_that_does_not_exist' => 'test value'])
+        $person = PersonData::factory()
             ->make();
 
         $mockClient = new MockClient([
             MergePeople::class => MockResponse::fixture('person/merge_people_with_invalid_field'),
         ]);
 
+        $payload = $person->toArray();
+        $payload['fields']['str::invalid_field_that_does_not_exist'] = 'Some';
+
         $response = $this->ortto
             ->withMockClient($mockClient)
             ->send(
                 new MergePeople(
                     people: [
-                        $person->toArray(),
+                        $payload,
                     ],
                     mergeBy: ['str::email'],
                     mergeStrategy: MergeStrategy::OverwriteExisting->value,
@@ -280,7 +282,7 @@ test('people are merged successfully',
      */
     function (): void {
 
-        $person = Person::factory()->make();
+        $person = PersonData::factory()->make();
 
         $mockClient = new MockClient([
             MergePeople::class => MockResponse::fixture('person/merge_people_ok'),
