@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Mon, 03 Nov 2025 19:10:26 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "613",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2510290108-1776-2eac27c"
+    },
+    "data": "{\"people\":[{\"person_id\":\"006908fe20a2e942c6a59000\",\"status\":\"created\"},{\"person_id\":\"006908fe20a2e942c6a59300\",\"status\":\"created\"},{\"person_id\":\"006908fe20a2e942c6a59900\",\"status\":\"created\"},{\"person_id\":\"006908fe20a2e942c6a59c00\",\"status\":\"created\"},{\"person_id\":\"006908fe20a2e942c6a59600\",\"status\":\"created\"},{\"person_id\":\"006908fe20a2e942c6a59f00\",\"status\":\"created\"},{\"person_id\":\"006908fe20a2e942c6a58400\",\"status\":\"created\"},{\"person_id\":\"006908fe20a2e942c6a58700\",\"status\":\"created\"},{\"person_id\":\"006908fe20a2e942c6a58a00\",\"status\":\"created\"},{\"person_id\":\"006908fe20a2e942c6a58d00\",\"status\":\"created\"}]}\n",
+    "context": []
+}

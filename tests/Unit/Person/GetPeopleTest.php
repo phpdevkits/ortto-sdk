@@ -51,10 +51,10 @@ test('gets people with limit and sorting',
             ->withMockClient($mockClient)
             ->send(
                 new GetPeople(
+                    fields: ['str::email', 'str::first', 'str::last'],
                     limit: 10,
                     sortByFieldId: 'str::last',
                     sortOrder: SortOrder::Asc,
-                    fields: ['str::email', 'str::first', 'str::last'],
                 ),
             );
 
@@ -108,9 +108,9 @@ test('gets people with pagination offset',
             ->withMockClient($mockClient)
             ->send(
                 new GetPeople(
+                    fields: ['str::email'],
                     limit: 50,
                     offset: 100,
-                    fields: ['str::email'],
                 ),
             );
 
@@ -139,12 +139,12 @@ test('includes cursor id in request body when provided',
             ->withMockClient($mockClient)
             ->send(
                 new GetPeople(
-                    cursorId: '0069061b5bda4060a576',
                     fields: ['str::email'],
+                    cursorId: '0069061b5bda4060a576',
                 ),
             );
 
-        // Just verify the request was made (may return 400 with invalid cursor, that's ok)
+        // Verify the request was made (may return 400 with invalid cursor, that's ok)
         expect($response->status())
             ->toBeIn([200, 400]);
 

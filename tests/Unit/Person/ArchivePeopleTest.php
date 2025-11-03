@@ -64,7 +64,6 @@ test('archives all contacts with bulk flag',
         $mockClient = new MockClient([
             ArchivePeople::class => MockResponse::fixture('person/archive_people_all_rows'),
         ]);
-
         $response = $this->ortto
             ->withMockClient($mockClient)
             ->send(

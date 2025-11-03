@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Mon, 03 Nov 2025 19:10:39 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "313",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2510290108-1776-2eac27c"
+    },
+    "data": "{\"people\":[{\"person_id\":\"006908fe2fa2e942c6a5ad00\",\"status\":\"created\"},{\"person_id\":\"006908fe2fa2e942c6a5b000\",\"status\":\"created\"},{\"person_id\":\"006908fe2fa2e942c6a5b300\",\"status\":\"created\"},{\"person_id\":\"006908fe2fa2e942c6a5b600\",\"status\":\"created\"},{\"person_id\":\"006908fe2fa2e942c6a5b900\",\"status\":\"created\"}]}\n",
+    "context": []
+}
