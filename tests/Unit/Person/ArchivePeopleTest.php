@@ -50,7 +50,8 @@ test('archives specific contacts by ids',
             ->and($response->json())
             ->toHaveKey('archived_contacts')
             ->and($response->json('archived_contacts'))
-            ->toBeInt();
+            ->toBeInt()
+            ->toBe(1);
 
     });
 
