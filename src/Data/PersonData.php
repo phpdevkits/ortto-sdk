@@ -9,6 +9,8 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Tests\Factories\PersonFactory;
 
+use function collect;
+
 /**
  * @implements Arrayable<string, mixed>
  */
@@ -75,6 +77,6 @@ class PersonData implements Arrayable
      */
     public function newCollection(array $items = []): Collection
     {
-        return new Collection($items);
+        return collect($items);
     }
 }
