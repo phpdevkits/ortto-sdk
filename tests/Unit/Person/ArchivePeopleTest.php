@@ -1,7 +1,9 @@
 <?php
 
+use PhpDevKits\Ortto\Enums\PersonField;
 use PhpDevKits\Ortto\Ortto;
 use PhpDevKits\Ortto\Requests\Person\ArchivePeople;
+use PhpDevKits\Ortto\Requests\Person\GetPeople;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 
@@ -16,14 +18,30 @@ test('archives specific contacts by ids',
     function (): void {
 
         $mockClient = new MockClient([
+            GetPeople::class => MockResponse::fixture('person/get_people_for_archiving'),
             ArchivePeople::class => MockResponse::fixture('person/archive_people_by_ids'),
         ]);
 
         $response = $this->ortto
             ->withMockClient($mockClient)
             ->send(
+                new GetPeople(
+                    fields: [
+                        PersonField::Email, PersonField::FirstName, PersonField::LastName, PersonField::PhoneNumber,
+                    ],
+                    limit: 1
+                ),
+            );
+
+        $contacts = collect($response->json()['contacts']);
+
+        $firstContactId = $contacts->first()['id'];
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->send(
                 new ArchivePeople(
-                    inclusionIds: ['0069061b5bda4060a5765300'],
+                    inclusionIds: [$firstContactId],
                 ),
             );
 

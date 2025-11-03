@@ -21,12 +21,12 @@ class GetPeople extends Request implements HasBody
      * @param  array<string, mixed>|null  $filter
      */
     public function __construct(
-        protected ?int $limit = null,
+        protected array $fields,
+        protected ?int $limit = 100,
         protected ?string $sortByFieldId = null,
         protected string|SortOrder|null $sortOrder = null,
         protected ?int $offset = null,
         protected ?string $cursorId = null,
-        protected ?array $fields = null,
         protected ?string $q = null,
         protected ?string $type = null,
         protected ?array $filter = null,
