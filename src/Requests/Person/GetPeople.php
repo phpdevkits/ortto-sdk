@@ -17,7 +17,7 @@ class GetPeople extends Request implements HasBody
     protected Method $method = Method::POST;
 
     /**
-     * @param  string[]|null  $fields
+     * @param  string[]  $fields
      * @param  array<string, mixed>|null  $filter
      */
     public function __construct(
@@ -62,10 +62,6 @@ class GetPeople extends Request implements HasBody
 
         if ($this->cursorId !== null) {
             $body['cursor_id'] = $this->cursorId;
-        }
-
-        if ($this->fields !== null) {
-            $body['fields'] = $this->fields;
         }
 
         if ($this->q !== null) {
