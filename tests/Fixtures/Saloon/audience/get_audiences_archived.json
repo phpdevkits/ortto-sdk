@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Mon, 03 Nov 2025 21:56:41 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "957",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2510290108-1776-2eac27c"
+    },
+    "data": "[{\"id\":\"6909072c5ea77d77d413159e\",\"instance_id\":\"betweendynamic\",\"folder_id\":null,\"data_source_id\":\"000000000000000000000000\",\"icon_id\":\"audiences-illustration-icon\",\"type\":\"permanent\",\"building\":false,\"ready\":true,\"is_public\":false,\"sms_is_public\":true,\"sms_public_name\":\"customers\",\"sms_public_description\":\"Customers\",\"filter\":null,\"filter_sha\":\"54b0cfbcb150e6db701b0a593882b5dceee750b5\",\"last_built_at\":\"2025-11-03T19:49:00.663Z\",\"new_filter\":null,\"new_filter_sha\":\"\",\"last_used\":\"2025-11-03T19:49:00.621Z\",\"created\":\"2025-11-03T19:49:00.621Z\",\"created_by_id\":\"6904f3819eaf8556a6df6486\",\"created_by_name\":\"Francisco Barrento\",\"edited_at\":\"2025-11-03T19:49:00.621Z\",\"archived_at\":\"2025-11-03T20:38:18.127Z\",\"name\":\"audience\",\"public_name\":\"\",\"public_description\":\"\",\"exit_selection\":\"\",\"new_exit_criteria_filter\":null,\"ds_destinations\":null,\"sms_opted_in\":0,\"subscribers\":0,\"members\":0,\"added_last_30_days\":0,\"engagement\":0,\"revenue\":0,\"is_cold\":false}]\n",
+    "context": []
+}

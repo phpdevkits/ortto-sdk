@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Mon, 03 Nov 2025 21:56:42 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "897",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2510290108-1776-2eac27c"
+    },
+    "data": "[{\"id\":\"6904f4fbf0cc08364094a968\",\"instance_id\":\"betweendynamic\",\"folder_id\":null,\"data_source_id\":\"000000000000000000000000\",\"icon_id\":\"audiences-illustration-icon\",\"type\":\"permanent\",\"building\":false,\"ready\":true,\"is_public\":false,\"sms_is_public\":false,\"sms_public_name\":\"\",\"sms_public_description\":\"\",\"filter\":null,\"filter_sha\":\"c62ce0967b9ae02e769ef51f41c7990c83f7ec83\",\"last_built_at\":\"2025-10-31T17:42:20.625Z\",\"new_filter\":null,\"new_filter_sha\":\"\",\"last_used\":\"2025-10-31T17:42:19.777Z\",\"created\":\"2025-10-31T17:42:19.777Z\",\"created_by_id\":\"\",\"created_by_name\":\"\",\"edited_at\":\"2025-10-31T17:42:19.777Z\",\"name\":\"My team\",\"public_name\":\"\",\"public_description\":\"\",\"template_id\":\"000000000a00000000000500\",\"exit_selection\":\"\",\"new_exit_criteria_filter\":null,\"ds_destinations\":null,\"sms_opted_in\":0,\"subscribers\":0,\"members\":0,\"added_last_30_days\":0,\"engagement\":0,\"revenue\":0,\"is_cold\":false}]\n",
+    "context": []
+}

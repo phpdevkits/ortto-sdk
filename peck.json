@@ -13,7 +13,8 @@
             "asc",
             "desc",
             "param",
-            "birthdate"
+            "birthdate",
+            "subclasses"
         ],
         "paths": [
             "docs"

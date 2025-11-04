@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Mon, 03 Nov 2025 21:56:44 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "829",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2510290108-1776-2eac27c"
+    },
+    "data": "{\"people\":[{\"person_status\":\"merged\",\"person_id\":\"0069091a7c13f062f778ad00\",\"email\":\"subscription.test@example.com\",\"subscriptions\":[{\"audience_id\":\"6904f4fbf0cc08364094a965\",\"audience_name\":\"SMS subscribers\",\"member_from\":\"2025-11-03T21:11:24Z\",\"subscribed\":true,\"subscribed_from\":\"2025-11-03T21:11:24Z\",\"sms_opted_in\":true,\"whatsapp_opted_in\":false,\"ios_opted_in\":false,\"android_opted_in\":false,\"web_opted_in\":false},{\"audience_id\":\"6904f4faf0cc08364094a964\",\"audience_name\":\"Subscribers\",\"member_from\":\"2025-11-03T21:23:17Z\",\"subscribed\":true,\"subscribed_from\":\"2025-11-03T21:23:17Z\",\"sms_opted_in\":true,\"whatsapp_opted_in\":false,\"ios_opted_in\":false,\"android_opted_in\":false,\"web_opted_in\":false}],\"email_permissions\":true,\"sms_permissions\":true,\"ios_permissions\":false,\"android_permissions\":false,\"web_permissions\":false}]}\n",
+    "context": []
+}

@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Mon, 03 Nov 2025 21:56:44 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "72",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2510290108-1776-2eac27c"
+    },
+    "data": "{\"people\":[{\"person_id\":\"0069091a7c13f062f778ad00\",\"status\":\"merged\"}]}\n",
+    "context": []
+}

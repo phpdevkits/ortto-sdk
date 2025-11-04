@@ -5,18 +5,15 @@ declare(strict_types=1);
 namespace Tests\Factories;
 
 use Carbon\CarbonImmutable;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use PhpDevKits\Ortto\Data\PersonData;
 
 use function fake;
 
 /**
- * @extends Factory<PersonData>
+ * @extends BaseFactory<PersonData>
  */
-final class PersonFactory extends Factory
+final class PersonFactory extends BaseFactory
 {
     /**
      * The name of the factory's corresponding data object.
@@ -24,11 +21,6 @@ final class PersonFactory extends Factory
      * @var class-string<PersonData>
      */
     protected $model = PersonData::class;
-
-    /**
-     * @var array<string, mixed>
-     */
-    private array $extraAttributes = [];
 
     public function definition(): array
     {
@@ -47,46 +39,8 @@ final class PersonFactory extends Factory
         ];
     }
 
-    /**
-     * Override make to handle non-Eloquent PersonData.
-     *
-     * @param  array<string, mixed>  $attributes
-     * @return PersonData|Collection<int, PersonData>
-     */
-    public function make($attributes = [], ?Model $parent = null): PersonData|Collection
+    protected function createDataObject(array $attributes): PersonData
     {
-        $this->extraAttributes = $attributes;
-
-        if ($this->count === null) {
-            return $this->makeInstance($parent);
-        }
-
-        $instances = [];
-
-        for ($i = 0; $i < $this->count; $i++) {
-            $instances[] = $this->makeInstance($parent);
-        }
-
-        return collect($instances);
-    }
-
-    /**
-     * Make a single instance.
-     */
-    protected function makeInstance(?Model $parent = null): PersonData
-    {
-        $attributes = array_merge(
-            $this->getRawAttributes($parent),
-            $this->extraAttributes
-        );
-
-        return new PersonData(...$attributes);
-    }
-
-    public function newModel(array $attributes = []): PersonData
-    {
-        $attributes = array_merge($this->definition(), $attributes);
-
         return new PersonData(...$attributes);
     }
 }

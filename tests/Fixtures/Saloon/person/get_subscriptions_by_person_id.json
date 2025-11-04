@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Tue, 04 Nov 2025 18:44:13 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "508",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2510290108-1776-2eac27c"
+    },
+    "data": "{\"people\":[{\"person_status\":\"by-id\",\"person_id\":\"00690a497c192b642e21dd00\",\"subscriptions\":[{\"audience_id\":\"6904f4fbf0cc08364094a965\",\"audience_name\":\"SMS subscribers\",\"member_from\":\"2025-11-04T18:44:13Z\",\"subscribed\":false,\"subscribed_from\":\"2025-11-04T18:44:13Z\",\"sms_opted_in\":true,\"whatsapp_opted_in\":false,\"ios_opted_in\":false,\"android_opted_in\":false,\"web_opted_in\":false}],\"email_permissions\":false,\"sms_permissions\":true,\"ios_permissions\":false,\"android_permissions\":false,\"web_permissions\":false}]}\n",
+    "context": []
+}
