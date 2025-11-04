@@ -15,7 +15,18 @@
             "param",
             "birthdate",
             "subclasses",
-            "timeframe"
+            "timeframe",
+            "namespaces",
+            "calendly",
+            "chargebee",
+            "gorgias",
+            "magento",
+            "pipedrive",
+            "presta",
+            "recurly",
+            "shopify",
+            "typeform",
+            "zendesk"
         ],
         "paths": [
             "docs"
