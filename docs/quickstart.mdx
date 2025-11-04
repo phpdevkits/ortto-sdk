@@ -1,0 +1,371 @@
+---
+title: "Quickstart"
+description: "Get up and running with Ortto SDK in under 5 minutes"
+---
+
+## Installation
+
+Get started by installing the Ortto SDK via Composer.
+
+<Steps>
+  <Step title="Install via Composer">
+    Install the package using Composer:
+
+    ```bash
+    composer require phpdevkits/ortto-sdk
+    ```
+
+    The package will be automatically discovered by Laravel.
+  </Step>
+
+  <Step title="Publish Configuration">
+    Publish the configuration file to your Laravel application:
+
+    ```bash
+    php artisan vendor:publish --provider="PhpDevKits\Ortto\OrttoServiceProvider"
+    ```
+
+    This creates `config/ortto.php` in your Laravel application.
+  </Step>
+
+  <Step title="Configure API Credentials">
+    Add your Ortto API credentials to your `.env` file:
+
+    ```env
+    ORTTO_API_KEY=your-api-key-here
+    ORTTO_API_URL=https://api.ap3api.com/v1
+    ```
+
+    <Tip>Get your API key from your Ortto account settings under API > Custom API.</Tip>
+  </Step>
+</Steps>
+
+## Configuration
+
+### API Regions
+
+Ortto uses region-specific endpoints. Set the correct API URL for your account region:
+
+<Tabs>
+  <Tab title="Default (AP3)">
+    ```env
+    ORTTO_API_URL=https://api.ap3api.com/v1
+    ```
+
+    Use this for most Ortto accounts (default).
+  </Tab>
+
+  <Tab title="Australia">
+    ```env
+    ORTTO_API_URL=https://api.au.ap3api.com/v1
+    ```
+
+    Use this if your Ortto instance is in the Australia region.
+  </Tab>
+
+  <Tab title="Europe">
+    ```env
+    ORTTO_API_URL=https://api.eu.ap3api.com/v1
+    ```
+
+    Use this if your Ortto instance is in the Europe region.
+  </Tab>
+</Tabs>
+
+### Configuration File
+
+The published configuration file (`config/ortto.php`) looks like this:
+
+```php
+return [
+
+    'api_key' => env('ORTTO_API_KEY', ''),
+
+    'url' => env('ORTTO_API_URL', 'https://api.eu.ap3api.com/v1'),
+
+    'suppression_list_field_id' => env('ORTTO_SUPPRESSION_LIST_FIELD_ID', 'str::email'),
+
+];
+```
+
+<Note>
+  The `url` field should be set to the full API endpoint URL including `/v1` for your region.
+</Note>
+
+## Your First Request
+
+Let's create your first contact in Ortto!
+
+<CodeGroup>
+
+```php Facade
+use PhpDevKits\Ortto\Facades\Ortto;
+use PhpDevKits\Ortto\Enums\PersonField;
+use PhpDevKits\Ortto\Enums\MergeStrategy;
+
+$response = Ortto::send(
+    new MergePeople(
+        people: [
+            [
+                'fields' => [
+                    'str::email' => 'john.doe@example.com',
+                    'str::first' => 'John',
+                    'str::last' => 'Doe',
+                ]
+            ]
+        ],
+        mergeBy: [PersonField::Email],
+        mergeStrategy: MergeStrategy::OverwriteExisting,
+    )
+);
+
+// Check the response
+if ($response->successful()) {
+    $personId = $response->json('people.0.person_id');
+    $status = $response->json('people.0.status'); // 'created' or 'merged'
+}
+```
+
+```php Dependency Injection
+use PhpDevKits\Ortto\Ortto;
+use PhpDevKits\Ortto\Requests\Person\MergePeople;
+use PhpDevKits\Ortto\Enums\PersonField;
+use PhpDevKits\Ortto\Enums\MergeStrategy;
+
+class ContactController extends Controller
+{
+    public function __construct(
+        private Ortto $ortto
+    ) {}
+
+    public function store(Request $request)
+    {
+        $response = $this->ortto->send(
+            new MergePeople(
+                people: [
+                    [
+                        'fields' => [
+                            'str::email' => $request->email,
+                            'str::first' => $request->first_name,
+                            'str::last' => $request->last_name,
+                        ]
+                    ]
+                ],
+                mergeBy: [PersonField::Email],
+                mergeStrategy: MergeStrategy::OverwriteExisting,
+            )
+        );
+
+        return response()->json([
+            'person_id' => $response->json('people.0.person_id'),
+            'status' => $response->json('people.0.status'),
+        ]);
+    }
+}
+```
+
+</CodeGroup>
+
+<Check>
+  **Success!** You've created your first contact in Ortto using the SDK.
+</Check>
+
+## Common Operations
+
+Here are some common operations you'll perform with the SDK:
+
+<AccordionGroup>
+  <Accordion icon="user-plus" title="Create or Update Contact">
+    ```php
+    use PhpDevKits\Ortto\Facades\Ortto;
+    use PhpDevKits\Ortto\Requests\Person\MergePeople;
+    use PhpDevKits\Ortto\Enums\PersonField;
+    use PhpDevKits\Ortto\Enums\MergeStrategy;
+
+    $response = Ortto::send(
+        new MergePeople(
+            people: [
+                [
+                    'fields' => [
+                        'str::email' => 'user@example.com',
+                        'str::first' => 'Jane',
+                        'str::last' => 'Smith',
+                        'str::phone' => '+1234567890',
+                        'bol::p' => true, // Email permission
+                    ]
+                ]
+            ],
+            mergeBy: [PersonField::Email],
+            mergeStrategy: MergeStrategy::OverwriteExisting,
+        )
+    );
+    ```
+  </Accordion>
+
+  <Accordion icon="magnifying-glass" title="Get Contact Information">
+    ```php
+    use PhpDevKits\Ortto\Facades\Ortto;
+    use PhpDevKits\Ortto\Requests\Person\GetPeople;
+
+    $response = Ortto::send(
+        new GetPeople(
+            fields: ['str::email', 'str::first', 'str::last'],
+            q: 'user@example.com',
+            limit: 1,
+        )
+    );
+
+    $contacts = $response->json('contacts');
+    ```
+  </Accordion>
+
+  <Accordion icon="clock-rotate-left" title="Get Activity Feed">
+    ```php
+    use PhpDevKits\Ortto\Facades\Ortto;
+    use PhpDevKits\Ortto\Requests\Person\GetPersonActivities;
+    use PhpDevKits\Ortto\Enums\ActivityTimeframe;
+
+    $response = Ortto::send(
+        new GetPersonActivities(
+            personId: '0069061b5bda4060a5765300',
+            timeframe: ActivityTimeframe::Last30Days,
+            limit: 50,
+        )
+    );
+
+    $activities = $response->json('activities');
+    ```
+  </Accordion>
+
+  <Accordion icon="users" title="List Audiences">
+    ```php
+    use PhpDevKits\Ortto\Facades\Ortto;
+    use PhpDevKits\Ortto\Requests\Audience\GetAudiences;
+
+    $response = Ortto::send(
+        new GetAudiences(
+            searchTerm: 'subscribers',
+            limit: 20,
+        )
+    );
+
+    $audiences = $response->json();
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Using with Testing
+
+The SDK is built on Saloon, which provides excellent testing capabilities with MockClient:
+
+```php
+use PhpDevKits\Ortto\Ortto;
+use PhpDevKits\Ortto\Requests\Person\MergePeople;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+
+test('creates contact in ortto', function () {
+    $mockClient = new MockClient([
+        MergePeople::class => MockResponse::make([
+            'people' => [
+                [
+                    'person_id' => '123456',
+                    'status' => 'created',
+                ]
+            ]
+        ]),
+    ]);
+
+    $ortto = new Ortto();
+
+    $response = $ortto
+        ->withMockClient($mockClient)
+        ->send(new MergePeople(/* ... */));
+
+    expect($response->json('people.0.status'))->toBe('created');
+});
+```
+
+<Tip>
+  MockClient can auto-record real API responses as fixtures for easier test setup!
+</Tip>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="People API"
+    icon="users"
+    href="/api-reference/person/introduction"
+  >
+    Learn about managing contacts in Ortto.
+  </Card>
+
+  <Card
+    title="Activities API"
+    icon="chart-line"
+    href="/api-reference/activities/introduction"
+  >
+    Track and retrieve customer activities.
+  </Card>
+
+  <Card
+    title="Audiences API"
+    icon="user-group"
+    href="/api-reference/audiences/introduction"
+  >
+    Manage audience subscriptions.
+  </Card>
+
+  <Card
+    title="Testing Guide"
+    icon="vial"
+    href="/development"
+  >
+    Learn how to test with the SDK.
+  </Card>
+</CardGroup>
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion icon="triangle-exclamation" title="401 Unauthorized">
+    **Problem:** Your API key is invalid or missing.
+
+    **Solution:**
+    - Verify `ORTTO_API_KEY` is set in `.env`
+    - Check the API key in your Ortto account settings
+    - Ensure no extra spaces or quotes around the key
+  </Accordion>
+
+  <Accordion icon="triangle-exclamation" title="404 Not Found">
+    **Problem:** Wrong API endpoint URL or person doesn't exist.
+
+    **Solution:**
+    - Verify `ORTTO_API_URL` is set to the correct regional endpoint
+    - Ensure URL includes `/v1` at the end
+    - For person endpoints, ensure the person_id is valid
+  </Accordion>
+
+  <Accordion icon="triangle-exclamation" title="400 Bad Request">
+    **Problem:** Invalid request parameters or field IDs.
+
+    **Solution:**
+    - Check Ortto field format: `type::field` (e.g., `str::email`)
+    - Custom fields use: `type:cm:field` (e.g., `str:cm:job-title`)
+    - Ensure required parameters are provided
+  </Accordion>
+
+  <Accordion icon="triangle-exclamation" title="Rate Limiting">
+    **Problem:** Too many requests to certain endpoints.
+
+    **Solution:**
+    - Some endpoints have rate limits (e.g., 1 req/sec for activities)
+    - Implement exponential backoff for retries
+    - Use async mode for bulk operations
+  </Accordion>
+</AccordionGroup>
+
+<Note>
+  **Need more help?** Check the [API Reference](/api-reference/introduction) or [Ortto's official documentation](https://help.ortto.com/developer/latest/).
+</Note>

@@ -1,0 +1,181 @@
+---
+title: "Introduction"
+description: "A powerful Laravel SDK for the Ortto Customer Data Platform API"
+---
+
+## Welcome to Ortto SDK
+
+The Ortto SDK is a modern, type-safe PHP package for Laravel that provides seamless integration with [Ortto's Customer Data Platform](https://ortto.com). Built on top of [Saloon v3](https://docs.saloon.dev/), this SDK offers a fluent, developer-friendly interface to interact with Ortto's REST API.
+
+<Card
+  title="Quick Start"
+  icon="rocket"
+  href="/quickstart"
+  horizontal
+>
+  Get up and running in under 5 minutes.
+</Card>
+
+## Key Features
+
+<Columns cols={2}>
+  <Card
+    title="Type-Safe"
+    icon="shield-check"
+  >
+    100% type coverage with PHPStan max level. Built with PHP 8.4+ features including typed properties and enums.
+  </Card>
+  <Card
+    title="Laravel Integration"
+    icon="laravel"
+  >
+    First-class Laravel support with service providers, facades, and configuration publishing.
+  </Card>
+  <Card
+    title="Modern HTTP Client"
+    icon="bolt"
+  >
+    Built on Saloon v3 for powerful HTTP abstractions, middleware support, and excellent testing capabilities.
+  </Card>
+  <Card
+    title="Comprehensive Coverage"
+    icon="list-check"
+  >
+    Support for people, audiences, activities, and more. Constantly updated with new endpoints.
+  </Card>
+  <Card
+    title="Well Tested"
+    icon="vial"
+  >
+    100% code coverage with extensive integration tests and mocked responses.
+  </Card>
+  <Card
+    title="Developer Experience"
+    icon="code"
+  >
+    Fluent API, auto-completion, factories for testing, and detailed error messages.
+  </Card>
+</Columns>
+
+## Core Capabilities
+
+### People Management
+
+Create, update, retrieve, archive, and delete contacts in your Ortto CDP.
+
+```php
+use PhpDevKits\Ortto\Facades\Ortto;
+
+// Create or update a contact
+$response = Ortto::people()->merge([
+    'people' => [
+        ['fields' => [
+            'str::email' => 'contact@example.com',
+            'str::first' => 'John',
+            'str::last' => 'Doe',
+        ]],
+    ],
+    'mergeBy' => ['str::email'],
+]);
+```
+
+### Activity Tracking
+
+Retrieve activity feeds for contacts with filtering and pagination.
+
+```php
+$response = Ortto::activities()->getPersonActivities(
+    personId: '0069061b5bda4060a5765300',
+    timeframe: ActivityTimeframe::Last7Days,
+    limit: 50
+);
+```
+
+### Audience Management
+
+Manage audience subscriptions and retrieve audience information.
+
+```php
+$audiences = Ortto::audiences()->get(
+    searchTerm: 'subscribers',
+    limit: 20
+);
+```
+
+## Requirements
+
+<CardGroup cols={3}>
+  <Card title="PHP 8.4+" icon="php">
+    Modern PHP features
+  </Card>
+  <Card title="Laravel 10.x/11.x" icon="laravel">
+    Current LTS versions
+  </Card>
+  <Card title="Saloon v3" icon="plug">
+    HTTP client foundation
+  </Card>
+</CardGroup>
+
+## Quick Links
+
+<Columns cols={2}>
+  <Card
+    title="Installation"
+    icon="download"
+    href="/quickstart#installation"
+  >
+    Install via Composer and configure your API credentials.
+  </Card>
+  <Card
+    title="Configuration"
+    icon="gear"
+    href="/quickstart#configuration"
+  >
+    Set up your API key and region settings.
+  </Card>
+  <Card
+    title="API Reference"
+    icon="book"
+    href="/api-reference/introduction"
+  >
+    Complete API endpoint documentation.
+  </Card>
+  <Card
+    title="GitHub"
+    icon="github"
+    href="https://github.com/phpdevkits/ortto-sdk"
+  >
+    View source code and contribute.
+  </Card>
+</Columns>
+
+## What's Included
+
+This SDK provides comprehensive support for:
+
+- **People API** - Create, update, retrieve, archive, restore, and delete contacts
+- **Activities API** - Retrieve activity feeds with filtering and pagination
+- **Audiences API** - List audiences and manage subscriptions
+- **Account API** - Retrieve instance schema and field definitions
+- **Type-Safe Enums** - ActivityTimeframe, MergeStrategy, FindStrategy, SortOrder, PersonField
+- **Data Classes** - Typed DTOs with factory support for testing
+- **Laravel Facades** - Static access to all resources
+
+## Community & Support
+
+<CardGroup cols={2}>
+  <Card
+    title="Report Issues"
+    icon="bug"
+    href="https://github.com/phpdevkits/ortto-sdk/issues"
+  >
+    Found a bug? Let us know on GitHub.
+  </Card>
+  <Card
+    title="Ortto Help"
+    icon="life-ring"
+    href="https://help.ortto.com/developer/latest/"
+  >
+    Official Ortto API documentation.
+  </Card>
+</CardGroup>
