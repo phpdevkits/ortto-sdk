@@ -1,0 +1,1140 @@
+openapi: 3.1.0
+info:
+  title: Ortto CDP API
+  version: 1.0.0
+  description: |
+    Ortto Customer Data Platform (CDP) REST API for managing people, audiences, activities, and campaigns.
+
+    This API allows you to:
+    - Create and update contact records (people)
+    - Retrieve contact information with filtering and pagination
+    - Archive, restore, and delete contacts
+    - Manage audience subscriptions
+    - Track activities and events
+
+  contact:
+    name: Ortto API Support
+    url: https://help.ortto.com/developer/latest/
+  license:
+    name: Proprietary
+    url: https://ortto.com/terms
+
+servers:
+  - url: https://api.ap3api.com/v1
+    description: Default API endpoint (AP3 region)
+  - url: https://api.au1api.com/v1
+    description: Australia region endpoint
+  - url: https://api.eu1api.com/v1
+    description: Europe region endpoint
+
+security:
+  - ApiKeyAuth: []
+
+tags:
+  - name: Person
+    description: Person/contact management endpoints
+  - name: Audience
+    description: Audience management and subscription endpoints
+  - name: Activity
+    description: Activity tracking endpoints (future)
+  - name: Campaign
+    description: Campaign management endpoints (future)
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: Custom API key for authentication
+
+  schemas:
+    # Common field types
+    PersonFieldString:
+      type: object
+      description: String-type person field
+      additionalProperties:
+        type: string
+
+    PersonFieldBoolean:
+      type: object
+      description: Boolean-type person field
+      additionalProperties:
+        type: boolean
+
+    PersonFieldInteger:
+      type: object
+      description: Integer-type person field (decimals multiplied by 1000)
+      additionalProperties:
+        type: integer
+        format: int64
+
+    PersonFieldPhone:
+      type: object
+      description: Phone number field
+      properties:
+        c:
+          type: string
+          description: Country code (e.g., "61" for Australia)
+        n:
+          type: string
+          description: Phone number without trunk prefix
+      example:
+        c: "61"
+        n: "401234567"
+
+    PersonFieldPhoneAlt:
+      type: object
+      description: Alternative phone number format
+      properties:
+        phone:
+          type: string
+          description: Full phone number including country code
+        parse_with_country_code:
+          type: boolean
+          description: Whether to parse phone with country code
+      example:
+        phone: "61401234567"
+        parse_with_country_code: true
+
+    PersonFieldGeo:
+      type: object
+      description: Geographical data field
+      properties:
+        name:
+          type: string
+          description: Name of the location
+      example:
+        name: "Melbourne"
+
+    PersonFieldDate:
+      type: object
+      description: Date field with timezone
+      properties:
+        year:
+          type: integer
+        month:
+          type: integer
+          minimum: 1
+          maximum: 12
+        day:
+          type: integer
+          minimum: 1
+          maximum: 31
+        timezone:
+          type: string
+          description: Timezone identifier
+      example:
+        year: 1980
+        month: 3
+        day: 4
+        timezone: "Australia/Sydney"
+
+    PersonLocation:
+      type: object
+      description: Location data for a person
+      properties:
+        source_ip:
+          type: string
+          format: ipv4
+          description: IP address for geolocation
+      example:
+        source_ip: "119.18.0.218"
+
+    MergeStrategy:
+      type: integer
+      enum: [1, 2, 3]
+      description: |
+        Merge strategy for updating existing contacts:
+        - 1: Append only (only add new data, don't overwrite existing)
+        - 2: Overwrite existing (default - update all fields specified)
+        - 3: Ignore (don't update existing, only create new)
+      default: 2
+
+    FindStrategy:
+      type: integer
+      enum: [0, 1, 2]
+      description: |
+        Find strategy for matching contacts with multiple merge_by fields:
+        - 0: Any (default - try each merge_by field until match found)
+        - 1: Next only if previous empty (only check second field if first is empty on existing contact)
+        - 2: All (match on all provided merge_by fields)
+      default: 0
+
+    SortOrder:
+      type: string
+      enum: [asc, desc]
+      description: Sort order for results
+      default: desc
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        status:
+          type: string
+          description: Error status code
+      example:
+        error: "Email is suppressed"
+        status: "suppressed"
+
+paths:
+  /person/merge:
+    post:
+      tags:
+        - Person
+      summary: Create or update people
+      description: |
+        Create or update one or more person records in Ortto's CDP.
+
+        **Important notes:**
+        - Supports batch operations (1-100 people per request)
+        - Use `async: true` for better performance with large volumes
+        - Merge behavior determined by `merge_strategy`
+        - Can merge by email, person_id, or custom fields
+
+      operationId: mergePeople
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - people
+              properties:
+                people:
+                  type: array
+                  minItems: 1
+                  maxItems: 100
+                  description: Array of person objects to create/update
+                  items:
+                    type: object
+                    required:
+                      - fields
+                    properties:
+                      fields:
+                        type: object
+                        description: Person field data (see person field documentation)
+                        additionalProperties: true
+                        example:
+                          str::first: "Chris"
+                          str::last: "Smith"
+                          str::email: "chris.smith@example.com"
+                      location:
+                        $ref: '#/components/schemas/PersonLocation'
+                      tags:
+                        type: array
+                        items:
+                          type: string
+                        description: Tags to apply to this person
+                      unset_tags:
+                        type: array
+                        items:
+                          type: string
+                        description: Tags to remove from this person
+                      clear_fields:
+                        type: object
+                        description: Fields to clear when merge_strategy is 2
+                        additionalProperties: true
+                async:
+                  type: boolean
+                  default: false
+                  description: Queue ingestion for async processing (recommended for bulk operations)
+                merge_by:
+                  type: array
+                  items:
+                    type: string
+                  maxItems: 3
+                  description: Field IDs to use for matching (e.g., ["str::email"])
+                  example: ["str::email"]
+                merge_by_alt_fields:
+                  type: object
+                  description: Alternative fields for "check against another field" option
+                  additionalProperties:
+                    type: array
+                    items:
+                      type: string
+                merge_strategy:
+                  $ref: '#/components/schemas/MergeStrategy'
+                find_strategy:
+                  $ref: '#/components/schemas/FindStrategy'
+                skip_non_existing:
+                  type: boolean
+                  default: false
+                  description: Only update existing contacts, don't create new ones
+                suppression_list_field_id:
+                  type: string
+                  description: Field to check against email suppression list (e.g., "str::email")
+                  example: "str::email"
+                skip_suppression_check:
+                  type: boolean
+                  default: false
+                  description: Bypass suppression list check entirely
+            examples:
+              createMultiple:
+                summary: Create multiple new people
+                value:
+                  people:
+                    - fields:
+                        str::first: "Chris"
+                        str::last: "Smith"
+                        str::email: "chris.smith@example.com"
+                        str:cm:job-title: "Technician"
+                      location:
+                        source_ip: "119.18.0.218"
+                    - fields:
+                        str::first: "Alex"
+                        str::email: "alex@example.com"
+                  async: true
+                  merge_by: ["str::email"]
+                  merge_strategy: 2
+                  find_strategy: 0
+              updateExistingOverwrite:
+                summary: Update existing person (overwrite strategy)
+                description: When person exists, overwrites all specified fields
+                value:
+                  people:
+                    - fields:
+                        str::email: "existing@example.com"
+                        str::first: "UpdatedFirstName"
+                        str::last: "UpdatedLastName"
+                        str:cm:job-title: "Senior Developer"
+                  merge_by: ["str::email"]
+                  merge_strategy: 2
+                  find_strategy: 0
+              updateExistingAppendOnly:
+                summary: Update existing person (append only strategy)
+                description: Only fills empty fields, preserves existing values
+                value:
+                  people:
+                    - fields:
+                        str::email: "existing@example.com"
+                        str::first: "NewFirstName"
+                        str:cm:job-title: "Developer"
+                  merge_by: ["str::email"]
+                  merge_strategy: 1
+                  find_strategy: 0
+              updateExistingIgnore:
+                summary: Don't update existing, only create new
+                description: With merge_strategy 3, existing records are untouched
+                value:
+                  people:
+                    - fields:
+                        str::email: "existing@example.com"
+                        str::first: "IgnoredName"
+                    - fields:
+                        str::email: "newperson@example.com"
+                        str::first: "CreatedName"
+                  merge_by: ["str::email"]
+                  merge_strategy: 3
+                  find_strategy: 0
+              updateOnlyExisting:
+                summary: Update only existing, skip non-existing
+                description: Use skip_non_existing to prevent creating new contacts
+                value:
+                  people:
+                    - fields:
+                        str::email: "existing@example.com"
+                        str::first: "UpdatedName"
+                    - fields:
+                        str::email: "nonexistent@example.com"
+                        str::first: "WillBeSkipped"
+                  merge_by: ["str::email"]
+                  merge_strategy: 2
+                  skip_non_existing: true
+              clearFieldValues:
+                summary: Clear specific field values
+                description: Use clear_fields to explicitly null out fields
+                value:
+                  people:
+                    - fields:
+                        str::email: "existing@example.com"
+                        str::first: "John"
+                        str:cm:job-title: null
+                      clear_fields:
+                        str:cm:job-title: true
+                  merge_by: ["str::email"]
+                  merge_strategy: 2
+              mergeByPersonId:
+                summary: Merge by person ID
+                description: Most efficient merge method using guaranteed unique ID
+                value:
+                  people:
+                    - fields:
+                        str::first: "Jack"
+                        str::last: "Skellington"
+                        str::person_id: "00647687d2e43b25a0261f00"
+                  merge_by: ["str::person_id"]
+                  merge_strategy: 2
+              withTags:
+                summary: Add and remove tags
+                value:
+                  people:
+                    - fields:
+                        str::email: "tagged@example.com"
+                        str::first: "Tagged"
+                      tags: ["VIP", "Premium Customer"]
+                      unset_tags: ["Free Trial"]
+                  merge_by: ["str::email"]
+                  merge_strategy: 2
+              withSuppressionCheck:
+                summary: Check suppression list
+                description: Skip creating contacts with suppressed emails
+                value:
+                  people:
+                    - fields:
+                        str::email: "might-be-suppressed@example.com"
+                        str::first: "Test"
+                  merge_by: ["str::email"]
+                  merge_strategy: 2
+                  suppression_list_field_id: "str::email"
+              multipleMergeKeys:
+                summary: Use multiple merge keys with fallback
+                description: Try email first, fall back to phone if no email match
+                value:
+                  people:
+                    - fields:
+                        str::email: "contact@example.com"
+                        phn::phone:
+                          c: "61"
+                          n: "401234567"
+                        str::first: "Multi"
+                  merge_by: ["str::email", "phn::phone"]
+                  merge_strategy: 2
+                  find_strategy: 0
+      responses:
+        '200':
+          description: People successfully created/updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  people:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        person_id:
+                          type: string
+                          description: Ortto person ID
+                        status:
+                          type: string
+                          enum: [created, merged, suppressed]
+                          description: Operation result
+                        error:
+                          type: string
+                          description: Error message (if status is suppressed)
+              examples:
+                created:
+                  summary: New person created
+                  value:
+                    people:
+                      - person_id: "0069061df82dad244f13a400"
+                        status: "created"
+                merged:
+                  summary: Existing person updated
+                  value:
+                    people:
+                      - person_id: "0069061df82dad244f13a400"
+                        status: "merged"
+                suppressed:
+                  summary: Email on suppression list
+                  value:
+                    people:
+                      - status: "suppressed"
+                        error: "Email is suppressed"
+                mixed:
+                  summary: Multiple operations (created, merged, suppressed)
+                  value:
+                    people:
+                      - person_id: "0069061df82dad244f13a400"
+                        status: "created"
+                      - person_id: "0069061df82dad244f13a401"
+                        status: "merged"
+                      - status: "suppressed"
+                        error: "Email is suppressed"
+        '400':
+          description: Bad request (invalid parameters)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized (invalid API key)
+        '500':
+          description: Internal server error
+
+  /person/get:
+    post:
+      tags:
+        - Person
+      summary: Retrieve people with filters
+      description: |
+        Retrieve person records from Ortto's CDP with filtering, sorting, and pagination.
+
+        **Features:**
+        - Advanced filtering with AND/OR conditions
+        - Pagination via offset or cursor_id
+        - Field selection (specify which fields to return)
+        - Search by text query
+
+      operationId: getPeople
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - fields
+              properties:
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 500
+                  default: 50
+                  description: Number of records per page
+                sort_by_field_id:
+                  type: string
+                  description: Field ID to sort by
+                  example: "str::last"
+                sort_order:
+                  $ref: '#/components/schemas/SortOrder'
+                offset:
+                  type: integer
+                  minimum: 0
+                  default: 0
+                  description: Pagination offset
+                cursor_id:
+                  type: string
+                  description: Cursor ID for next page (from previous response)
+                fields:
+                  type: array
+                  minItems: 1
+                  maxItems: 100
+                  items:
+                    type: string
+                  description: Field IDs to return in response
+                  example: ["str::first", "str::last", "str::email"]
+                q:
+                  type: string
+                  description: Text search query
+                type:
+                  type: string
+                  description: Filter type (e.g., "archived")
+                  example: "archived"
+                filter:
+                  type: object
+                  description: Advanced filter conditions
+                  additionalProperties: true
+            examples:
+              basic:
+                summary: Basic get with fields
+                value:
+                  limit: 100
+                  sort_by_field_id: "str::last"
+                  sort_order: "asc"
+                  offset: 0
+                  fields:
+                    - "str::first"
+                    - "str::last"
+                    - "str::email"
+                  filter:
+                    $has_any_value:
+                      field_id: "str::first"
+              withAndFilter:
+                summary: With AND filter conditions
+                value:
+                  limit: 100
+                  fields: ["str::email", "str::last"]
+                  filter:
+                    $and:
+                      - $has_any_value:
+                          field_id: "str::last"
+                      - $str::is:
+                          field_id: "str::email"
+                          value: "contact@email.com"
+      responses:
+        '200':
+          description: People retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contacts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Person ID
+                        fields:
+                          type: object
+                          description: Requested person fields
+                          additionalProperties: true
+                  meta:
+                    type: object
+                    properties:
+                      total_contacts:
+                        type: integer
+                      total_organizations:
+                        type: integer
+                      total_matches:
+                        type: integer
+                      total_subscribers:
+                        type: integer
+                  offset:
+                    type: integer
+                  next_offset:
+                    type: integer
+                  cursor_id:
+                    type: string
+                  has_more:
+                    type: boolean
+              example:
+                contacts:
+                  - id: "0061b02b24f9b6f85dcb1e00"
+                    fields:
+                      str::ei: "c533532fe5d16c7d4fa4c7f0"
+                      str::email: "alex@example.com"
+                      str::first: "Alex"
+                meta:
+                  total_contacts: 5
+                  total_organizations: 0
+                  total_matches: 5
+                  total_subscribers: 5
+                offset: 0
+                next_offset: 5
+                cursor_id: "0062299d655c7cf67184e1e0"
+                has_more: false
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+
+  /person/get-by-ids:
+    post:
+      tags:
+        - Person
+      summary: Retrieve people by IDs
+      description: |
+        Retrieve specific person records by their contact IDs.
+
+        **Important:**
+        - Returns contacts as object keyed by person_id (not array)
+        - Maximum 20 fields can be requested
+        - Maximum 150 contact IDs per request
+
+      operationId: getPeopleByIds
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - contact_ids
+                - fields
+              properties:
+                contact_ids:
+                  type: array
+                  minItems: 1
+                  maxItems: 150
+                  items:
+                    type: string
+                  description: Array of person IDs to retrieve
+                fields:
+                  type: array
+                  minItems: 1
+                  maxItems: 20
+                  items:
+                    type: string
+                  description: Field IDs to return
+            example:
+              contact_ids:
+                - "0066cc4c16dfd264d0e99b00"
+                - "00668d816ce2d34c550fe300"
+              fields:
+                - "str::email"
+                - "str::first"
+      responses:
+        '200':
+          description: People retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Object with person_id as keys
+                additionalProperties:
+                  type: object
+                  properties:
+                    fields:
+                      type: object
+                      additionalProperties: true
+              example:
+                "0066cc4c16dfd264d0e99b00":
+                  fields:
+                    str::email: "user1@example.com"
+                    str::first: "John"
+                "00668d816ce2d34c550fe300":
+                  fields:
+                    str::email: "user2@example.com"
+                    str::first: "Jane"
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /person/archive:
+    put:
+      tags:
+        - Person
+      summary: Archive people
+      description: |
+        Archive one or more person records. Archived contacts can be restored or deleted.
+
+      operationId: archivePeople
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inclusion_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Contact IDs to archive
+                exclusion_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Contact IDs to exclude from bulk operation
+                all_rows_selected:
+                  type: boolean
+                  description: Archive all contacts (use with exclusion_ids)
+            examples:
+              byIds:
+                summary: Archive specific contacts
+                value:
+                  inclusion_ids:
+                    - "00609384fa6de6e7a8d89d01"
+              bulkWithExclusions:
+                summary: Archive all except specified
+                value:
+                  all_rows_selected: true
+                  exclusion_ids:
+                    - "006281d8ff95c3ed70b70800"
+      responses:
+        '200':
+          description: People archived successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scheduled_contacts:
+                    type: integer
+                  archived_contacts:
+                    type: integer
+              example:
+                scheduled_contacts: 0
+                archived_contacts: 35
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /person/restore:
+    put:
+      tags:
+        - Person
+      summary: Restore archived people
+      description: |
+        Restore previously archived person records.
+
+        **Note:** Contacts must be archived before they can be restored.
+
+      operationId: restorePeople
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inclusion_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Archived contact IDs to restore
+                exclusion_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Contact IDs to exclude from bulk operation
+                all_rows_selected:
+                  type: boolean
+                  description: Restore all archived contacts
+            example:
+              inclusion_ids:
+                - "00609384fa6de6e7a8d89d01"
+      responses:
+        '200':
+          description: People restored successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scheduled_contacts:
+                    type: integer
+                  restored_contacts:
+                    type: integer
+              example:
+                scheduled_contacts: 0
+                restored_contacts: 10
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /person/delete:
+    delete:
+      tags:
+        - Person
+      summary: Delete archived people
+      description: |
+        Permanently delete archived person records.
+
+        **Warning:** This operation is irreversible.
+        **Note:** Contacts must be archived before they can be deleted.
+
+      operationId: deletePeople
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inclusion_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Archived contact IDs to delete
+                exclusion_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Contact IDs to exclude from bulk operation
+                all_rows_selected:
+                  type: boolean
+                  description: Delete all archived contacts
+            example:
+              inclusion_ids:
+                - "00609384fa6de6e7a8d89d01"
+      responses:
+        '200':
+          description: People deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scheduled_contacts:
+                    type: integer
+                  deleted_contacts:
+                    type: integer
+              example:
+                scheduled_contacts: 0
+                deleted_contacts: 5
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /person/subscriptions:
+    post:
+      tags:
+        - Person
+      summary: Get people's subscription statuses
+      description: |
+        Retrieve subscription information for one or more people.
+
+      operationId: getPeopleSubscriptions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - people
+              properties:
+                people:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      person_id:
+                        type: string
+                      email:
+                        type: string
+                      external_id:
+                        type: string
+                    description: At least one identifier required per person
+            example:
+              people:
+                - person_id: "00647687d2e43b25a0261f00"
+                - email: "contact@example.com"
+      responses:
+        '200':
+          description: Subscription statuses retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  people:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        person_status:
+                          type: string
+                        person_id:
+                          type: string
+                        subscriptions:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              audience_id:
+                                type: string
+                              audience_name:
+                                type: string
+                              member_from:
+                                type: string
+                                format: date-time
+                              subscribed:
+                                type: boolean
+                              subscribed_from:
+                                type: string
+                                format: date-time
+                              unsubscribed_from:
+                                type: string
+                                format: date-time
+                                nullable: true
+                              sms_opted_in:
+                                type: boolean
+                              sms_opted_out_from:
+                                type: string
+                                format: date-time
+                                nullable: true
+                        email_permissions:
+                          type: boolean
+                        sms_permissions:
+                          type: boolean
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /audiences/get:
+    post:
+      tags:
+        - Audience
+      summary: Get list of audiences
+      description: |
+        Retrieve a list of audiences from Ortto CDP.
+
+      operationId: getAudiences
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                search_term:
+                  type: string
+                  description: Search audience names
+                with_filter:
+                  type: boolean
+                  default: false
+                  description: Include filter conditions in response
+                limit:
+                  type: integer
+                  maximum: 40
+                  default: 40
+                  description: Number of audiences per page
+                offset:
+                  type: integer
+                  default: 0
+                  description: Pagination offset
+                archived:
+                  type: boolean
+                  description: Return archived audiences
+                retention:
+                  type: boolean
+                  description: Return retention-type audiences
+            example:
+              search_term: "subscribers"
+              with_filter: true
+              limit: 10
+              offset: 0
+      responses:
+        '200':
+          description: Audiences retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    instance_id:
+                      type: string
+                    icon_id:
+                      type: string
+                    type:
+                      type: string
+                    building:
+                      type: boolean
+                    ready:
+                      type: boolean
+                    is_public:
+                      type: boolean
+                    name:
+                      type: string
+                    members:
+                      type: integer
+                    added_last_30_days:
+                      type: integer
+                    filter:
+                      type: array
+                      description: Only present when with_filter is true
+              example:
+                - id: "624bd7905a9d367aaf824083"
+                  instance_id: "myorttoaccount"
+                  icon_id: "mobile-illustration-icon"
+                  type: "permanent"
+                  building: false
+                  ready: true
+                  is_public: false
+                  name: "SMS subscribers"
+                  members: 53
+                  added_last_30_days: 3
+        '401':
+          description: Unauthorized
+
+  /audience/subscribe:
+    put:
+      tags:
+        - Audience
+      summary: Subscribe/unsubscribe people to/from audience
+      description: |
+        Update email and/or SMS subscription preferences for people in a specific audience.
+
+        **Important:**
+        - This does NOT add people to audiences (membership is automatic via filter rules)
+        - Only updates opt-in/opt-out preferences for existing audience members
+        - People must already be audience members for changes to apply
+
+      operationId: subscribeToAudience
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - audience_id
+                - people
+              properties:
+                audience_id:
+                  type: string
+                  description: Target audience ID
+                people:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                      person_id:
+                        type: string
+                      external_id:
+                        type: string
+                      subscribed:
+                        type: boolean
+                        description: Email subscription status
+                      sms_opted_in:
+                        type: boolean
+                        description: SMS opt-in status
+                    description: At least one identifier required
+                async:
+                  type: boolean
+                  description: Enable async processing
+            examples:
+              emailSubscription:
+                summary: Email subscriptions
+                value:
+                  audience_id: "61380ac92593ecf2de4fd705"
+                  people:
+                    - email: "person1@example.com"
+                      subscribed: true
+                    - email: "person2@example.com"
+                      subscribed: false
+                  async: true
+              smsSubscription:
+                summary: SMS subscriptions
+                value:
+                  audience_id: "61380ac92593ecf2de9ab302"
+                  people:
+                    - email: "person3@example.com"
+                      sms_opted_in: true
+                  async: true
+      responses:
+        '200':
+          description: Subscription status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  audience_id:
+                    type: string
+                  people:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        person_status:
+                          type: string
+                        status:
+                          type: string
+                          enum: [subscribed, unsubscribed]
+              example:
+                audience_id: "61380ac92593ecf2de4fd705"
+                people:
+                  - person_status: "by-id"
+                    status: "subscribed"
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
