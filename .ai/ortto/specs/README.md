@@ -4,7 +4,7 @@ This directory contains the OpenAPI 3.1 specification for the Ortto CDP REST API
 
 ## Files
 
-- **openapi.yaml** - Complete OpenAPI specification covering Person and Audience endpoints
+- **openapi.yaml** - Complete OpenAPI specification covering Person, Audience, and Account endpoints
 
 ## Coverage
 
@@ -22,6 +22,9 @@ The OpenAPI specification currently includes:
 ### Audience Endpoints
 - `POST /v1/audiences/get` - Get list of audiences
 - `PUT /v1/audience/subscribe` - Subscribe/unsubscribe people to/from audience
+
+### Account Endpoints
+- `POST /v1/instance-schema/get` - Retrieve instance schema and field definitions
 
 ## Key Features
 
@@ -98,10 +101,23 @@ docker run -p 8080:8080 \
 
 ## Future Endpoints
 
-The following endpoints are planned but not yet documented:
+The following endpoints are known to exist but lack detailed documentation:
+
+### Account/Organization Management (Pending Documentation)
+- `POST /v1/accounts/get` - Retrieve one or more accounts
+- `POST /v1/accounts/get-by-ids` - Retrieve accounts by their IDs
+- `POST /v1/accounts/merge` - Create or update multiple accounts
+- `PUT /v1/accounts/archive` - Archive accounts
+- `PUT /v1/accounts/restore` - Restore archived accounts
+- `DELETE /v1/accounts/delete` - Delete accounts
+- `POST /v1/accounts/contacts/add` - Add contacts to an account
+- `POST /v1/accounts/contacts/remove` - Remove contacts from an account
+
+### Other Entities (Planned)
 - Activity tracking endpoints
 - Campaign management endpoints
-- Additional person management operations
+- Custom fields management endpoints
+- Tags management endpoints
 
 ## Resources
 
@@ -118,6 +134,12 @@ This OpenAPI specification is maintained alongside the local Ortto API documenta
 3. Validate changes against actual SDK implementation in `src/Requests/`
 4. Update this README if new endpoints are added
 
+## Related Documentation
+
+- **Implementation Plan**: `.ai/specs/account-api-implementation-plan.md` - Detailed plan for Account API implementation
+- **Task Checklist**: `.ai/specs/account-api-tasks.md` - Comprehensive checklist for Account API tasks
+- **Account Docs**: `.ai/ortto/account/` - Markdown documentation for account endpoints
+
 ## Notes
 
 - All timestamps use ISO 8601 format
@@ -125,3 +147,4 @@ This OpenAPI specification is maintained alongside the local Ortto API documenta
 - Merge strategies: 1=Append, 2=Overwrite (default), 3=Ignore
 - Find strategies: 0=Any (default), 1=Next only if previous empty, 2=All
 - Person records support batch operations (typically 1-100 per request)
+- Namespace IDs: `cm` (custom), `sf` (Salesforce), `sh` (Shopify), `st` (Stripe), etc.

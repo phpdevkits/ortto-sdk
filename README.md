@@ -106,11 +106,11 @@ Ortto::campaigns()->send([
 
 Browse the `docs/` directory for detailed documentation:
 
-- **[Introduction](docs/introduction.md)** - Learn about Ortto SDK and its features
-- **[Installation Guide](docs/installation.md)** - Get set up in minutes
-- **[Testing Overview](docs/testing/overview.md)** - Testing with Pest and Lawman
-- **[Architecture Tests](docs/testing/architecture-tests.md)** - Validate Saloon architecture with Lawman
-- **[Mocking](docs/testing/mocking.md)** - Mock API responses with Saloon MockClient
+- **[Introduction](docs_old/introduction.md)** - Learn about Ortto SDK and its features
+- **[Installation Guide](docs_old/installation.md)** - Get set up in minutes
+- **[Testing Overview](docs_old/testing/overview.md)** - Testing with Pest and Lawman
+- **[Architecture Tests](docs_old/testing/architecture-tests.md)** - Validate Saloon architecture with Lawman
+- **[Mocking](docs_old/testing/mocking.md)** - Mock API responses with Saloon MockClient
 
 ## API Reference
 
@@ -161,7 +161,7 @@ The package includes comprehensive test coverage using PEST and [Lawman](https:/
 composer test
 ```
 
-Learn more about testing in our [Testing Documentation](docs/testing/overview.md).
+Learn more about testing in our [Testing Documentation](docs_old/testing/overview.md).
 
 ## Changelog
 
