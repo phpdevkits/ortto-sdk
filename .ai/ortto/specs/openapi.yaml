@@ -10,6 +10,7 @@ info:
     - Retrieve contact information with filtering and pagination
     - Archive, restore, and delete contacts
     - Manage audience subscriptions
+    - Retrieve account schema and field definitions
     - Track activities and events
 
   contact:
@@ -35,8 +36,10 @@ tags:
     description: Person/contact management endpoints
   - name: Audience
     description: Audience management and subscription endpoints
+  - name: Account
+    description: Account/organization schema and management endpoints
   - name: Activity
-    description: Activity tracking endpoints (future)
+    description: Activity tracking and retrieval endpoints
   - name: Campaign
     description: Campaign management endpoints (future)
 
@@ -167,6 +170,29 @@ components:
       description: Sort order for results
       default: desc
 
+    ActivityTimeframe:
+      type: object
+      description: Time range filter for activities
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - last-24-hours
+            - last-7-days
+            - last-30-days
+            - today
+            - yesterday
+            - this-week
+            - this-month
+            - this-quarter
+            - this-year
+            - all
+          description: Relative time period
+      example:
+        type: last-7-days
+
     Error:
       type: object
       properties:
@@ -179,6 +205,78 @@ components:
       example:
         error: "Email is suppressed"
         status: "suppressed"
+
+    # Account/Schema related schemas
+    InstanceSchemaRequest:
+      type: object
+      properties:
+        namespaces:
+          type: array
+          items:
+            type: string
+          description: Array of namespace IDs to retrieve. Empty array returns all namespaces.
+          example: ["cm", "sf"]
+      example:
+        namespaces: []
+
+    InstanceSchemaField:
+      type: object
+      description: Schema definition for a field
+      properties:
+        id:
+          type: string
+          description: Field identifier
+        display_type:
+          type: string
+          description: Field classification (activity, text, geo, bool, date, etc.)
+        name:
+          type: string
+          description: Human-readable field name
+        attributes:
+          type: object
+          description: Sub-fields with liquid variable names for templates
+          additionalProperties:
+            type: object
+            properties:
+              liquid_variable:
+                type: string
+                description: Liquid template variable
+        triggers:
+          type: array
+          description: Conditional logic operations
+          items:
+            type: string
+            enum: [set, set_if_greater, set_if_less]
+      example:
+        id: "str:cm:custom-field"
+        display_type: "text"
+        name: "Custom Field"
+        attributes:
+          value:
+            liquid_variable: "{{contact.field.cm.custom_field}}"
+
+    InstanceSchemaNamespace:
+      type: object
+      description: Schema data for a specific namespace
+      properties:
+        fields:
+          type: object
+          description: Field definitions indexed by field ID
+          additionalProperties:
+            $ref: '#/components/schemas/InstanceSchemaField'
+
+    InstanceSchemaResponse:
+      type: object
+      description: Complete instance schema response
+      additionalProperties:
+        $ref: '#/components/schemas/InstanceSchemaNamespace'
+      example:
+        cm:
+          fields:
+            str:cm:custom-field:
+              id: "str:cm:custom-field"
+              display_type: "text"
+              name: "Custom Field"
 
 paths:
   /person/merge:
@@ -952,6 +1050,225 @@ paths:
         '401':
           description: Unauthorized
 
+  /person/get/activities:
+    post:
+      tags:
+        - Activity
+      summary: Retrieve activity feed for a person
+      description: |
+        Retrieve the activity feed for a specific contact with optional filtering and pagination.
+
+        **Features:**
+        - Filter by activity type (opens, clicks, sends, etc.)
+        - Time range filtering (last 7 days, today, etc.)
+        - Pagination support via offset
+        - Activity history up to retention limit (default 90 days)
+
+        **Rate Limit:** 1 request per second
+
+      operationId: getPersonActivities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - person_id
+              properties:
+                person_id:
+                  type: string
+                  description: Unique identifier for the contact
+                  example: "0069061b5bda4060a5765300"
+                activities:
+                  type: array
+                  items:
+                    type: string
+                  description: Activity IDs to filter by (e.g., ["act::o", "act::c"])
+                  example: ["act::o", "act::c"]
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 50
+                  description: Number of activities per page (default/max varies by configuration)
+                  example: 20
+                offset:
+                  type: integer
+                  minimum: 0
+                  description: Pagination offset
+                  example: 0
+                timeframe:
+                  $ref: '#/components/schemas/ActivityTimeframe'
+            examples:
+              basic:
+                summary: Basic request
+                value:
+                  person_id: "0069061b5bda4060a5765300"
+              withFilters:
+                summary: With activity filters
+                value:
+                  person_id: "0069061b5bda4060a5765300"
+                  activities: ["act::o", "act::c"]
+                  limit: 20
+              withTimeframe:
+                summary: With timeframe filter
+                value:
+                  person_id: "0069061b5bda4060a5765300"
+                  timeframe:
+                    type: last-7-days
+                  limit: 50
+              withPagination:
+                summary: With pagination
+                value:
+                  person_id: "0069061b5bda4060a5765300"
+                  limit: 50
+                  offset: 50
+              complete:
+                summary: All parameters
+                value:
+                  person_id: "0069061b5bda4060a5765300"
+                  activities: ["act::o", "act::c", "act::s"]
+                  limit: 20
+                  offset: 0
+                  timeframe:
+                    type: last-30-days
+      responses:
+        '200':
+          description: Activity feed retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  activities:
+                    type: array
+                    nullable: true
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique activity ID
+                        field_id:
+                          type: string
+                          description: Activity type identifier
+                        created_at:
+                          type: string
+                          format: date-time
+                          description: When the activity occurred
+                        attr:
+                          type: object
+                          description: Activity-specific attributes
+                          additionalProperties: true
+                        render_cmds:
+                          type: array
+                          description: Rendering commands for UI display
+                          items:
+                            type: object
+                  meta:
+                    type: object
+                    properties:
+                      total_activities:
+                        type: integer
+                        description: Total number of activities matching criteria
+                      field_ids:
+                        type: array
+                        nullable: true
+                        items:
+                          type: string
+                        description: Activity IDs included in filter (null if no filter)
+                      has_more:
+                        type: boolean
+                        description: Whether more activities are available
+                      retention:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            description: Retention policy type
+                            example: time
+                          max_value:
+                            type: integer
+                            description: Retention period in days
+                            example: 90
+                  offset:
+                    type: integer
+                    description: Current pagination offset
+                  next_offset:
+                    type: integer
+                    description: Offset for next page
+              examples:
+                withActivities:
+                  summary: Response with activities
+                  value:
+                    activities:
+                      - id: "00690a4fa7e4574617cd9392"
+                        attr:
+                          str::soo-ctx: "Unsubscribed via API"
+                        created_at: "2025-11-04T19:10:31Z"
+                        field_id: "act::oos-all"
+                        render_cmds:
+                          - content: "Unsubscribed from sms"
+                          - content: "."
+                      - id: "00690a4fa7e4574617cd9190"
+                        attr:
+                          str::is: "API"
+                          str::s-ctx: "Subscribed via API"
+                        created_at: "2025-11-04T19:10:31Z"
+                        field_id: "act::s-all"
+                        render_cmds:
+                          - content: "Subscribed to email"
+                          - content: "."
+                    meta:
+                      total_activities: 3
+                      field_ids: null
+                      has_more: false
+                      retention:
+                        type: time
+                        max_value: 90
+                    offset: 0
+                    next_offset: 3
+                noActivities:
+                  summary: Response with no activities
+                  value:
+                    activities: null
+                    meta:
+                      total_activities: 0
+                      field_ids: ["act::o", "act::c"]
+                      has_more: false
+                      retention:
+                        type: time
+                        max_value: 90
+                    offset: 0
+                    next_offset: 0
+        '400':
+          description: Bad request (invalid parameters)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Person not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  request_id:
+                    type: string
+                  code:
+                    type: integer
+                  error:
+                    type: string
+              example:
+                request_id: "aec54163-70c0-466f-adb8-499d9d29b79a"
+                code: 404
+                error: "Person 0069061b5bda4060a5765300 not found"
+        '401':
+          description: Unauthorized (invalid API key)
+        '429':
+          description: Rate limit exceeded (max 1 request per second)
+
   /audiences/get:
     post:
       tags:
@@ -1138,3 +1455,102 @@ paths:
           description: Bad request
         '401':
           description: Unauthorized
+
+  /instance-schema/get:
+    post:
+      tags:
+        - Account
+      summary: Retrieve instance schema
+      description: |
+        Retrieve schema data for one or more namespaces within Ortto's CDP.
+
+        **Features:**
+        - Get all schemas by providing empty namespaces array
+        - Get specific namespace schemas (custom fields, integrations, etc.)
+        - Useful for discovering available custom fields and data structures
+        - Returns field definitions with liquid template variables
+
+      operationId: getInstanceSchema
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstanceSchemaRequest'
+            examples:
+              allNamespaces:
+                summary: Get all namespaces
+                description: Retrieve schema for all available namespaces
+                value:
+                  namespaces: []
+              customFields:
+                summary: Get custom fields schema
+                description: Retrieve only custom fields namespace
+                value:
+                  namespaces: ["cm"]
+              salesforce:
+                summary: Get Salesforce schema
+                description: Retrieve Salesforce integration schema
+                value:
+                  namespaces: ["sf"]
+              multiple:
+                summary: Get multiple namespaces
+                description: Retrieve schemas for custom fields and Shopify
+                value:
+                  namespaces: ["cm", "sh"]
+              integrations:
+                summary: Get common integration schemas
+                value:
+                  namespaces: ["sf", "sh", "st", "hs"]
+      responses:
+        '200':
+          description: Instance schema retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceSchemaResponse'
+              examples:
+                customFieldsResponse:
+                  summary: Custom fields namespace response
+                  value:
+                    cm:
+                      fields:
+                        str:cm:job-title:
+                          id: "str:cm:job-title"
+                          display_type: "text"
+                          name: "Job Title"
+                          attributes:
+                            value:
+                              liquid_variable: "{{contact.field.cm.job_title}}"
+                        str:cm:industry:
+                          id: "str:cm:industry"
+                          display_type: "text"
+                          name: "Industry"
+                          attributes:
+                            value:
+                              liquid_variable: "{{contact.field.cm.industry}}"
+                multipleNamespaces:
+                  summary: Multiple namespaces response
+                  value:
+                    cm:
+                      fields:
+                        str:cm:custom-field:
+                          id: "str:cm:custom-field"
+                          display_type: "text"
+                          name: "Custom Field"
+                    sf:
+                      fields:
+                        str:sf:account_name:
+                          id: "str:sf:account_name"
+                          display_type: "text"
+                          name: "Salesforce Account Name"
+        '400':
+          description: Bad request (invalid parameters)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized (invalid API key)
+        '500':
+          description: Internal server error

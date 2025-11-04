@@ -14,7 +14,8 @@
             "desc",
             "param",
             "birthdate",
-            "subclasses"
+            "subclasses",
+            "timeframe"
         ],
         "paths": [
             "docs"

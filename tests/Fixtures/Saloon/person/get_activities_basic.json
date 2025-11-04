@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Tue, 04 Nov 2025 19:10:31 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "917",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2510290108-1776-2eac27c"
+    },
+    "data": "{\"activities\":[{\"id\":\"00690a4fa7e4574617cd9392\",\"attr\":{\"str::soo-ctx\":\"Unsubscribed via API\"},\"created_at\":\"2025-11-04T19:10:31Z\",\"field_id\":\"act::oos-all\",\"render_cmds\":[{\"content\":\"Unsubscribed from sms\"},{\"content\":\".\"}]},{\"id\":\"00690a4fa7e4574617cd9190\",\"attr\":{\"str::is\":\"API\",\"str::s-ctx\":\"Subscribed via API\"},\"created_at\":\"2025-11-04T19:10:31Z\",\"field_id\":\"act::s-all\",\"render_cmds\":[{\"content\":\"Subscribed to email\"},{\"content\":\".\"}]},{\"id\":\"00690a4fa719e524a270d500\",\"attr\":{\"idt::a\":\"6904f4faf0cc08364094a964\",\"str::name\":\"Subscribers\"},\"created_at\":\"2025-11-04T19:10:31Z\",\"field_id\":\"act::enter-audience\",\"render_cmds\":[{\"content\":\"Entered audience\"},{\"content\":\" \"},{\"content\":\"Subscribers\",\"link\":\"\/audiences\/6904f4faf0cc08364094a964\/performance\"},{\"content\":\".\"}]}],\"meta\":{\"total_activities\":3,\"field_ids\":null,\"has_more\":false,\"retention\":{\"type\":\"time\",\"max_value\":90}},\"offset\":0,\"next_offset\":3}\n",
+    "context": []
+}
