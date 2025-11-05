@@ -20,29 +20,53 @@ use Throwable;
 class AccountsResource extends BaseResource
 {
     /**
-     * Create or update one or more organizations (accounts).
+     * Associate one or more contacts (people) with an account.
+     * Each account can have up to 3,000 associated contacts.
      *
-     * @param  array<int, array<string, mixed>>  $accounts  Array of account records (1-100 max)
-     * @param  string[]  $mergeBy  Field IDs specifying which account fields determine create vs. update logic
-     * @param  int|MergeStrategy  $mergeStrategy  Controls how existing values merge (1=Append, 2=Overwrite [default], 3=Ignore)
-     * @param  int|FindStrategy  $findStrategy  For dual merge fields: 0=Any match, 1=First field only
+     * @param  string  $accountId  Account ID to add contacts to
+     * @param  string[]  $personIds  Person IDs to associate with the account
      *
      * @throws Throwable
      */
-    public function merge(
-        array $accounts,
-        array $mergeBy,
-        int|MergeStrategy $mergeStrategy = MergeStrategy::OverwriteExisting,
-        int|FindStrategy $findStrategy = FindStrategy::Any,
-        bool $async = false
-    ): Response {
+    public function addContacts(string $accountId, array $personIds): Response
+    {
         return $this->connector->send(
-            request: new MergeAccounts(
-                accounts: $accounts,
-                mergeBy: $mergeBy,
-                mergeStrategy: $mergeStrategy,
-                findStrategy: $findStrategy,
-                async: $async,
+            request: new AddContactsToAccount(
+                accountId: $accountId,
+                personIds: $personIds,
+            ),
+        );
+    }
+
+    /**
+     * Archive one or more accounts (organizations).
+     *
+     * @param  string[]  $accountIds  Account IDs to archive
+     *
+     * @throws Throwable
+     */
+    public function archive(array $accountIds): Response
+    {
+        return $this->connector->send(
+            request: new ArchiveAccounts(
+                accountIds: $accountIds,
+            ),
+        );
+    }
+
+    /**
+     * Permanently delete one or more archived accounts.
+     * Accounts must be archived before deletion.
+     *
+     * @param  string[]  $accountIds  Archived account IDs to delete
+     *
+     * @throws Throwable
+     */
+    public function delete(array $accountIds): Response
+    {
+        return $this->connector->send(
+            request: new DeleteAccounts(
+                accountIds: $accountIds,
             ),
         );
     }
@@ -113,69 +137,29 @@ class AccountsResource extends BaseResource
     }
 
     /**
-     * Archive one or more accounts (organizations).
+     * Create or update one or more organizations (accounts).
      *
-     * @param  string[]  $accountIds  Account IDs to archive
-     *
-     * @throws Throwable
-     */
-    public function archive(array $accountIds): Response
-    {
-        return $this->connector->send(
-            request: new ArchiveAccounts(
-                accountIds: $accountIds,
-            ),
-        );
-    }
-
-    /**
-     * Restore one or more archived accounts.
-     *
-     * @param  string[]  $accountIds  Account IDs to restore
+     * @param  array<int, array<string, mixed>>  $accounts  Array of account records (1-100 max)
+     * @param  string[]  $mergeBy  Field IDs specifying which account fields determine create vs. update logic
+     * @param  int|MergeStrategy  $mergeStrategy  Controls how existing values merge (1=Append, 2=Overwrite [default], 3=Ignore)
+     * @param  int|FindStrategy  $findStrategy  For dual merge fields: 0=Any match, 1=First field only
      *
      * @throws Throwable
      */
-    public function restore(array $accountIds): Response
-    {
+    public function merge(
+        array $accounts,
+        array $mergeBy,
+        int|MergeStrategy $mergeStrategy = MergeStrategy::OverwriteExisting,
+        int|FindStrategy $findStrategy = FindStrategy::Any,
+        bool $async = false
+    ): Response {
         return $this->connector->send(
-            request: new RestoreAccounts(
-                accountIds: $accountIds,
-            ),
-        );
-    }
-
-    /**
-     * Permanently delete one or more archived accounts.
-     * Accounts must be archived before deletion.
-     *
-     * @param  string[]  $accountIds  Archived account IDs to delete
-     *
-     * @throws Throwable
-     */
-    public function delete(array $accountIds): Response
-    {
-        return $this->connector->send(
-            request: new DeleteAccounts(
-                accountIds: $accountIds,
-            ),
-        );
-    }
-
-    /**
-     * Associate one or more contacts (people) with an account.
-     * Each account can have up to 3,000 associated contacts.
-     *
-     * @param  string  $accountId  Account ID to add contacts to
-     * @param  string[]  $personIds  Person IDs to associate with the account
-     *
-     * @throws Throwable
-     */
-    public function addContacts(string $accountId, array $personIds): Response
-    {
-        return $this->connector->send(
-            request: new AddContactsToAccount(
-                accountId: $accountId,
-                personIds: $personIds,
+            request: new MergeAccounts(
+                accounts: $accounts,
+                mergeBy: $mergeBy,
+                mergeStrategy: $mergeStrategy,
+                findStrategy: $findStrategy,
+                async: $async,
             ),
         );
     }
@@ -195,6 +179,22 @@ class AccountsResource extends BaseResource
             request: new RemoveContactsFromAccount(
                 accountId: $accountId,
                 personIds: $personIds,
+            ),
+        );
+    }
+
+    /**
+     * Restore one or more archived accounts.
+     *
+     * @param  string[]  $accountIds  Account IDs to restore
+     *
+     * @throws Throwable
+     */
+    public function restore(array $accountIds): Response
+    {
+        return $this->connector->send(
+            request: new RestoreAccounts(
+                accountIds: $accountIds,
             ),
         );
     }
