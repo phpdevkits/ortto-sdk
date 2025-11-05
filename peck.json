@@ -28,7 +28,8 @@
             "shopify",
             "typeform",
             "zendesk",
-            "geocode"
+            "geocode",
+            "coords"
         ],
         "paths": [
             "docs"
