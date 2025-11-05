@@ -167,6 +167,8 @@ $response = $this->ortto
 3. Uses the recorded fixture for subsequent test runs
 
 **Test Organization**:
+- Tests related to Request classes should be placed in `tests/Unit/Requests/` directory
+  - Example: Tests for `src/Requests/Person/MergePeople.php` go in `tests/Unit/Requests/Person/MergePeopleTest.php`
 - New tests should be placed **after** `beforeEach`/`afterEach` hooks but **before** older tests
 - Newest tests first, oldest tests last (reverse chronological order)
 - Use descriptive test names in snake_case
