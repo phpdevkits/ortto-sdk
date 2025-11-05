@@ -165,6 +165,14 @@ When implementing new Ortto API endpoints:
 6. Use type-safe arrays and DTOs for request/response data
 7. Follow Saloon best practices for authentication, middleware, and error handling
 
+### Resource Class Organization
+
+**Method Ordering**:
+- **ALWAYS organize Resource class methods in alphabetical order**
+- This improves code readability and makes methods easier to find
+- Example order: `activities()`, `archive()`, `delete()`, `get()`, `getByIds()`, `merge()`, `restore()`, `subscriptions()`
+- Applies to all Resource classes in `src/Resources/`
+
 ### Testing with Saloon MockClient
 
 Tests use Saloon's `MockClient` to mock HTTP responses:
