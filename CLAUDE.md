@@ -135,6 +135,24 @@ All code lives under the `PhpDevKits\Ortto` namespace, following PSR-4 autoloadi
 - `src/` → `PhpDevKits\Ortto\`
 - `tests/` → `Tests\`
 
+## Git and Version Control
+
+### Commit Messages
+- Write clear, concise commit messages describing the change
+- Use conventional commit format when appropriate (feat:, fix:, refactor:, etc.)
+- **DO NOT include `Co-Authored-By` trailers** - this project does not use co-authorship metadata
+- **DO NOT include "Generated with" or AI attribution** - commits should appear as regular human contributions
+- Focus commit messages on "why" rather than "what"
+
+### Pull Requests
+- Draft clear PR descriptions summarizing the changes
+- Include relevant context and motivation
+- List breaking changes if any
+- Add test plan or verification steps
+- **DO NOT include `Co-Authored-By` in PR descriptions** - attribution is handled through commit history
+- **DO NOT include "Generated with Claude Code" or similar AI attribution** - PRs should appear as regular contributions
+- Reference related issues when applicable
+
 ## Important Implementation Notes
 
 When implementing new Ortto API endpoints:
