@@ -1,5 +1,7 @@
 <?php
 
+use PhpDevKits\Ortto\Resources\AccountResource;
+use PhpDevKits\Ortto\Resources\AccountsResource;
 use PhpDevKits\Ortto\Resources\PersonResource;
 
 return [
@@ -24,6 +26,8 @@ return [
 
     'resources' => [
         'person' => PersonResource::class,
+        'account' => AccountResource::class,
+        'accounts' => AccountsResource::class,
     ],
 
 ];
