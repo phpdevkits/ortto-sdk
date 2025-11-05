@@ -40,6 +40,9 @@ class Ortto extends Connector
 
     public function person(): PersonResource
     {
-        return new PersonResource(connector: $this);
+        /** @var class-string<PersonResource> $class */
+        $class = config()->string('ortto.resources.person', PersonResource::class);
+
+        return new $class(connector: $this);
     }
 }

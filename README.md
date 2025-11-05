@@ -102,6 +102,170 @@ Ortto::campaigns()->send([
 ]);
 ```
 
+## Extending the SDK
+
+The SDK is designed to be extensible, allowing you to customize behavior for your specific needs.
+
+### Caching Responses
+
+The SDK is built on [Saloon](https://docs.saloon.dev/) and supports the [Saloon Cache Plugin](https://docs.saloon.dev/installable-plugins/caching-responses).
+
+#### Cache All Requests
+
+Extend the Ortto connector to add caching to all API requests:
+
+```php
+use PhpDevKits\Ortto\Ortto;
+use Saloon\CachePlugin\Contracts\Cacheable;
+use Saloon\CachePlugin\Traits\HasCaching;
+use Saloon\CachePlugin\Contracts\Driver;
+use Saloon\CachePlugin\Drivers\LaravelCacheDriver;
+
+class CachedOrtto extends Ortto implements Cacheable
+{
+    use HasCaching;
+
+    public function resolveCacheDriver(): Driver
+    {
+        return new LaravelCacheDriver('redis');
+    }
+
+    public function cacheExpiryInSeconds(): int
+    {
+        return 3600; // Cache for 1 hour
+    }
+}
+
+// Usage
+$ortto = new CachedOrtto();
+$response = $ortto->person()->get(
+    fields: [PersonField::Email->value, PersonField::FirstName->value]
+);
+// Subsequent identical requests will use the cache
+```
+
+#### Cache Specific Requests
+
+Extend individual request classes for granular caching control:
+
+```php
+use PhpDevKits\Ortto\Requests\Person\GetPeople;
+use Saloon\CachePlugin\Contracts\Cacheable;
+use Saloon\CachePlugin\Traits\HasCaching;
+use Saloon\CachePlugin\Contracts\Driver;
+use Saloon\CachePlugin\Drivers\LaravelCacheDriver;
+
+class CachedGetPeople extends GetPeople implements Cacheable
+{
+    use HasCaching;
+
+    public function resolveCacheDriver(): Driver
+    {
+        return new LaravelCacheDriver('redis');
+    }
+
+    public function cacheExpiryInSeconds(): int
+    {
+        return 600; // Cache for 10 minutes
+    }
+}
+
+// Usage
+$ortto = new Ortto();
+$response = $ortto->send(
+    new CachedGetPeople(
+        fields: [PersonField::Email->value]
+    )
+);
+```
+
+### Custom Resource Classes
+
+Override resource classes to add custom behavior like logging, rate limiting, or validation:
+
+```php
+// app/Ortto/CustomPersonResource.php
+namespace App\Ortto;
+
+use PhpDevKits\Ortto\Resources\PersonResource;
+use Saloon\Http\Response;
+use Illuminate\Support\Facades\Log;
+
+class CustomPersonResource extends PersonResource
+{
+    public function get(array $fields, ...): Response
+    {
+        // Add custom logic before the request
+        Log::info('Fetching people with fields', ['fields' => $fields]);
+
+        // Call the parent method
+        $response = parent::get($fields, ...);
+
+        // Add custom logic after the request
+        Log::info('Fetched people', [
+            'status' => $response->status(),
+            'count' => count($response->json('contacts', []))
+        ]);
+
+        return $response;
+    }
+
+    // Override other methods as needed
+}
+```
+
+Configure your custom resource in `config/ortto.php`:
+
+```php
+'resources' => [
+    'person' => \App\Ortto\CustomPersonResource::class,
+],
+```
+
+Now all calls to `$ortto->person()` will use your custom resource:
+
+```php
+$ortto = new Ortto();
+$ortto->person()->get(...); // Uses CustomPersonResource
+```
+
+### Advanced: Combining Caching with Custom Resources
+
+```php
+namespace App\Ortto;
+
+use PhpDevKits\Ortto\Resources\PersonResource;
+use PhpDevKits\Ortto\Requests\Person\GetPeople;
+use Saloon\CachePlugin\Contracts\Cacheable;
+use Saloon\CachePlugin\Traits\HasCaching;
+use Saloon\CachePlugin\Contracts\Driver;
+use Saloon\CachePlugin\Drivers\LaravelCacheDriver;
+use Saloon\Http\Response;
+
+class CachedPersonResource extends PersonResource
+{
+    public function get(array $fields, ...): Response
+    {
+        // Create a cached version of GetPeople
+        $request = new class(...) extends GetPeople implements Cacheable {
+            use HasCaching;
+
+            public function resolveCacheDriver(): Driver
+            {
+                return new LaravelCacheDriver('redis');
+            }
+
+            public function cacheExpiryInSeconds(): int
+            {
+                return 600;
+            }
+        };
+
+        return $this->connector->send($request);
+    }
+}
+```
+
 ## Documentation
 
 Browse the `docs/` directory for detailed documentation:

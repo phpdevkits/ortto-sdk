@@ -23,8 +23,11 @@ The OpenAPI specification currently includes:
 - `POST /v1/audiences/get` - Get list of audiences
 - `PUT /v1/audience/subscribe` - Subscribe/unsubscribe people to/from audience
 
-### Account Endpoints
+### Account Endpoints (Instance Schema)
 - `POST /v1/instance-schema/get` - Retrieve instance schema and field definitions
+
+### Accounts Endpoints (Organizations)
+- `POST /v1/accounts/merge` - Create or update organizations
 
 ## Key Features
 
@@ -44,14 +47,21 @@ Each endpoint includes:
 - Response schemas with examples
 - Error response formats
 
-### Person Field Types
-Comprehensive schemas for Ortto field types:
+### Field Types
+
+**Person Fields:**
 - String fields (`str::`)
 - Boolean fields (`bol::`)
 - Integer fields (`int::`)
 - Phone number fields (`phn::`)
 - Geographical fields (`geo::`)
 - Date/time fields (`dtz::`)
+
+**Account Fields (Organizations):**
+- Built-in fields (`str:o:`, `int:o:`, `geo:o:`)
+  - Examples: `str:o:name`, `str:o:website`, `int:o:employees`
+- Custom fields (`str:oc:`, `int:oc:`, etc.)
+  - Up to 100 custom fields supported
 
 ## Usage
 
