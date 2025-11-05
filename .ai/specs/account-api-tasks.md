@@ -8,10 +8,10 @@
 - [x] Add request/response examples
 - [x] Document supported namespaces
 
-### Additional Endpoints (Pending Full Documentation)
+### Organization Management Endpoints
+- [x] Document `/v1/accounts/merge` endpoint
 - [ ] Document `/v1/accounts/get` endpoint
 - [ ] Document `/v1/accounts/get-by-ids` endpoint
-- [ ] Document `/v1/accounts/merge` endpoint
 - [ ] Document `/v1/accounts/archive` endpoint
 - [ ] Document `/v1/accounts/restore` endpoint
 - [ ] Document `/v1/accounts/delete` endpoint
@@ -21,26 +21,31 @@
 ## OpenAPI Specification Tasks
 
 ### Schema Definitions
-- [ ] Define `AccountFieldString` schema
-- [ ] Define `AccountFieldBoolean` schema
-- [ ] Define `AccountFieldInteger` schema
-- [ ] Define `AccountFieldGeo` schema
-- [ ] Define `AccountFieldDate` schema
-- [ ] Define `AccountMergeStrategy` enum
-- [ ] Define `AccountFindStrategy` enum
-- [ ] Define `AccountFilter` schema
-- [ ] Define `AccountContact` relationship schema
-- [ ] Define namespace schema structures
+- [x] Define namespace schema structures (InstanceSchemaRequest, InstanceSchemaResponse, etc.)
+- [x] Define `AccountFields` schema
+- [x] Define `AccountRecord` schema
+- [x] Reuse `MergeStrategy` enum (from Person endpoints)
+- [x] Reuse `FindStrategy` enum (from Person endpoints)
+- [x] Define `MergeAccountsRequest` schema
+- [x] Define `MergeAccountsResponse` schema
+- [ ] Define `AccountFilter` schema (for future get endpoint)
+- [ ] Define `AccountContact` relationship schema (for future contact endpoints)
 
 ### Endpoint Specifications
-- [ ] Add `POST /v1/instance-schema/get` with:
-  - [ ] Request body schema
-  - [ ] Response schema with namespace structures
-  - [ ] Examples for all namespaces, specific namespace
-  - [ ] Error responses
+- [x] Add `POST /v1/instance-schema/get` with:
+  - [x] Request body schema
+  - [x] Response schema with namespace structures
+  - [x] Examples for all namespaces, specific namespace, multiple
+  - [x] Error responses
+- [x] Add `POST /v1/accounts/merge` with:
+  - [x] Request body schema (MergeAccountsRequest)
+  - [x] Response schema (MergeAccountsResponse)
+  - [x] 9 comprehensive examples (create, update, bulk, strategies, tags, geo fields, etc.)
+  - [x] Error responses
+- [x] Add "Account" tag for instance schema endpoints
+- [x] Add "Accounts" tag for organization management endpoints
 - [ ] Add `POST /v1/accounts/get` (when documented)
 - [ ] Add `POST /v1/accounts/get-by-ids` (when documented)
-- [ ] Add `POST /v1/accounts/merge` (when documented)
 - [ ] Add `PUT /v1/accounts/archive` (when documented)
 - [ ] Add `PUT /v1/accounts/restore` (when documented)
 - [ ] Add `DELETE /v1/accounts/delete` (when documented)
@@ -48,16 +53,12 @@
 - [ ] Add `POST /v1/accounts/contacts/remove` (when documented)
 
 ### Examples
-- [ ] Add instance-schema/get examples:
-  - [ ] Get all namespaces
-  - [ ] Get custom fields namespace (cm)
-  - [ ] Get Salesforce namespace (sf)
-  - [ ] Get multiple specific namespaces
-- [ ] Add comprehensive examples for other endpoints when documented
+- [x] Add instance-schema/get examples (5 examples added)
+- [x] Add accounts/merge examples (9 examples added)
 
-## SDK Implementation Tasks (Future Phase)
+## SDK Implementation Tasks
 
-### Data Classes
+### Data Classes (Future)
 - [ ] Create `src/Data/Account.php`:
   - [ ] Implement `Arrayable` interface
   - [ ] Add `$fields` property
@@ -66,7 +67,7 @@
 - [ ] Create `src/Data/InstanceSchema.php` for schema responses
 - [ ] Create `src/Data/AccountContact.php` for relationship data
 
-### Test Factories
+### Test Factories (Future)
 - [ ] Create `tests/Factories/AccountFactory.php`:
   - [ ] Extend base factory pattern
   - [ ] Generate account fields
@@ -75,20 +76,26 @@
 - [ ] Create `tests/Factories/InstanceSchemaFactory.php`
 
 ### Request Classes
-- [ ] `src/Requests/Account/GetInstanceSchema.php`:
-  - [ ] Extend Saloon `Request`
-  - [ ] Define POST method
-  - [ ] Set endpoint path
-  - [ ] Accept namespaces parameter
-  - [ ] Handle empty array for all namespaces
-- [ ] `src/Requests/Account/GetAccounts.php`
-- [ ] `src/Requests/Account/GetAccountsByIds.php`
-- [ ] `src/Requests/Account/MergeAccounts.php`
-- [ ] `src/Requests/Account/ArchiveAccounts.php`
-- [ ] `src/Requests/Account/RestoreAccounts.php`
-- [ ] `src/Requests/Account/DeleteAccounts.php`
-- [ ] `src/Requests/Account/AddContactsToAccount.php`
-- [ ] `src/Requests/Account/RemoveContactsFromAccount.php`
+- [x] `src/Requests/Account/GetAccountSchema.php`:
+  - [x] Extend Saloon `Request`
+  - [x] Define POST method
+  - [x] Set endpoint path `/instance-schema/get`
+  - [x] Accept namespaces parameter (array of AccountNamespace|string)
+  - [x] Handle empty array for all namespaces
+  - [x] Created AccountNamespace enum with 45 cases
+- [x] `src/Requests/Accounts/MergeAccounts.php`:
+  - [x] Extend Saloon `Request`
+  - [x] Define POST method
+  - [x] Set endpoint path `/v1/accounts/merge`
+  - [x] Accept accounts, mergeBy (required), mergeStrategy, findStrategy, async
+  - [x] Handle enum value conversion
+- [ ] `src/Requests/Accounts/GetAccounts.php`
+- [ ] `src/Requests/Accounts/GetAccountsByIds.php`
+- [ ] `src/Requests/Accounts/ArchiveAccounts.php`
+- [ ] `src/Requests/Accounts/RestoreAccounts.php`
+- [ ] `src/Requests/Accounts/DeleteAccounts.php`
+- [ ] `src/Requests/Accounts/AddContactsToAccount.php`
+- [ ] `src/Requests/Accounts/RemoveContactsFromAccount.php`
 
 ### Resource Class
 - [ ] Create `src/Resources/Accounts.php`:
@@ -108,30 +115,43 @@
 - [ ] Update connector resource registration
 
 ### Testing
-- [ ] Create test fixtures in `tests/Fixtures/Saloon/account/`:
-  - [ ] `get_instance_schema_all.json`
-  - [ ] `get_instance_schema_cm.json`
-  - [ ] `get_instance_schema_sf.json`
-  - [ ] Additional fixtures for other endpoints when available
-- [ ] Write unit tests in `tests/Unit/Account/`:
-  - [ ] `GetInstanceSchemaTest.php`
-  - [ ] Test all namespaces request
-  - [ ] Test specific namespace request
-  - [ ] Test multiple namespaces request
-  - [ ] Test empty response handling
-  - [ ] Additional tests for other endpoints
-- [ ] Ensure 100% code coverage
-- [ ] Ensure 100% type coverage
-- [ ] Add account data tests in `tests/Unit/Data/`:
+- [x] Create test fixtures in `tests/Fixtures/Saloon/account/`:
+  - [x] `get_account_schema_all_namespaces.json`
+  - [x] `get_account_schema_specific_namespace.json`
+  - [x] `get_account_schema_multiple_namespaces.json`
+- [x] Create test fixtures in `tests/Fixtures/Saloon/accounts/`:
+  - [x] `merge_accounts_create.json`
+  - [x] `merge_accounts_merge.json`
+  - [x] `merge_accounts_bulk.json`
+  - [x] `merge_accounts_with_tags.json`
+  - [x] `merge_accounts_merge_strategy.json`
+  - [x] `merge_accounts_find_strategy.json`
+- [x] Write unit tests in `tests/Unit/Requests/Account/`:
+  - [x] `GetAccountSchemaTest.php` (4 tests)
+  - [x] Test all namespaces request
+  - [x] Test specific namespace request
+  - [x] Test multiple namespaces request
+  - [x] Test accepts enum values
+- [x] Write unit tests in `tests/Unit/Requests/Accounts/`:
+  - [x] `MergeAccountsTest.php` (6 tests)
+  - [x] Test creates new account
+  - [x] Test merges existing account
+  - [x] Test bulk merge
+  - [x] Test merge strategies
+  - [x] Test find strategies
+  - [x] Test tag handling
+- [x] Ensure 100% code coverage (GetAccountSchema: 100%, MergeAccounts: 100%)
+- [x] Ensure 100% type coverage
+- [ ] Add account data tests in `tests/Unit/Data/` (when Data classes created):
   - [ ] `AccountDataTest.php`
   - [ ] `InstanceSchemaDataTest.php`
 
 ### Code Quality
-- [ ] Pass PHPStan analysis (max level)
-- [ ] Pass Rector refactoring checks
-- [ ] Pass Laravel Pint formatting
-- [ ] Fix any typos with Peck
-- [ ] Validate no dead code
+- [x] Pass PHPStan analysis (max level) - GetAccountSchema & MergeAccounts
+- [x] Pass Rector refactoring checks
+- [x] Pass Laravel Pint formatting
+- [x] Fix any typos with Peck
+- [x] Validate no dead code
 
 ## Documentation Update Tasks
 
@@ -167,17 +187,32 @@
 
 ## Current Progress
 
-**Completed Tasks: 4**
-- ✅ Created account documentation directory
+**Completed Tasks: 50+**
+
+### Documentation (Complete for implemented endpoints)
+- ✅ Created account/accounts documentation directories
 - ✅ Documented instance-schema/get endpoint
+- ✅ Documented accounts/merge endpoint
 - ✅ Created implementation plan
-- ✅ Created this task checklist
+- ✅ Created task checklist
+
+### OpenAPI Specification (Complete for implemented endpoints)
+- ✅ Added all required schemas
+- ✅ Added instance-schema/get endpoint with 5 examples
+- ✅ Added accounts/merge endpoint with 9 examples
+- ✅ Created separate tags for Account vs Accounts
+
+### SDK Implementation (2 endpoints complete)
+- ✅ Implemented GetAccountSchema with AccountNamespace enum
+- ✅ Implemented MergeAccounts
+- ✅ 10 tests written (100% coverage)
+- ✅ All quality checks passing
 
 **Next Immediate Tasks:**
-1. Add Account schemas to OpenAPI spec
-2. Add instance-schema/get endpoint to OpenAPI spec
-3. Update README.md with account coverage
-4. Research full documentation for remaining endpoints
+1. Update README.md with account coverage
+2. Research full documentation for remaining endpoints (get, get-by-ids, archive, restore, delete, contacts)
+3. Create Resource classes when ready
+4. Add facade integration
 
 ## Notes
 

@@ -3,6 +3,7 @@
 namespace PhpDevKits\Ortto;
 
 use InvalidArgumentException;
+use PhpDevKits\Ortto\Resources\PersonResource;
 use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 
@@ -37,11 +38,8 @@ class Ortto extends Connector
         ];
     }
 
-    /**
-     * Default HTTP client options
-     */
-    protected function defaultConfig(): array
+    public function person(): PersonResource
     {
-        return [];
+        return new PersonResource(connector: $this);
     }
 }

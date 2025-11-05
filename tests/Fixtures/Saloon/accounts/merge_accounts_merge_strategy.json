@@ -1,0 +1,10 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Tue, 05 Nov 2025 12:00:00 GMT",
+        "Content-Type": "application/json",
+        "Connection": "keep-alive"
+    },
+    "data": "{\"accounts\":[{\"status\":\"created\",\"account_id\":\"507f1f77bcf86cd799439016\"}]}",
+    "context": []
+}

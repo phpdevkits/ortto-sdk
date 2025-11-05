@@ -181,6 +181,18 @@ $response = $this->ortto
 - Custom fields use format: `{type}:cm:{field}` (e.g., `str:cm:job-title`)
 - Custom fields must be created in Ortto CDP before use in tests
 
+**Using PersonField Enum**:
+- **ALWAYS** use `PersonField` enum for built-in Ortto fields in code
+- Use `PersonField::Email->value` to get the string value when needed
+- For array contexts, use array mapping: `[PersonField::Email->value, PersonField::FirstName->value]`
+- Example: Instead of `'str::email'`, use `PersonField::Email->value`
+- Available enum cases:
+  - String fields: `ExternalId`, `Email`, `FirstName`, `LastName`, `FullName`, `PhoneNumber`, `PostalCode`
+  - Boolean fields: `EmailPermission`, `SmsPermission`
+  - Geo fields: `City`, `Country`
+  - DateTime fields: `Birthdate`
+- Custom fields (with `:cm:`) should still use string literals as they're user-defined
+
 **GetPeople/GetPeopleByIds Requirements**:
 - `fields` parameter is **required** (min: 1)
 - GetPeople: max 100 fields

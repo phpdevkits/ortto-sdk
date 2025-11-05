@@ -37,7 +37,9 @@ tags:
   - name: Audience
     description: Audience management and subscription endpoints
   - name: Account
-    description: Account/organization schema and management endpoints
+    description: Account instance schema endpoints
+  - name: Accounts
+    description: Organization/account management endpoints
   - name: Activity
     description: Activity tracking and retrieval endpoints
   - name: Campaign
@@ -277,6 +279,98 @@ components:
               id: "str:cm:custom-field"
               display_type: "text"
               name: "Custom Field"
+
+    # Account/Organization merge schemas
+    AccountFields:
+      type: object
+      description: Account field data using field ID format (type:namespace:field-name)
+      additionalProperties: true
+      example:
+        str:o:name: "Acme Corporation"
+        str:o:website: "https://acme.com"
+        int:o:employees: 150
+        str:o:industry: "Technology"
+
+    AccountRecord:
+      type: object
+      required:
+        - fields
+      properties:
+        fields:
+          $ref: '#/components/schemas/AccountFields'
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags to apply to the account
+          example: ["enterprise", "tech"]
+        unset_tags:
+          type: array
+          items:
+            type: string
+          description: Tags to remove from the account
+          example: ["startup"]
+
+    MergeAccountsRequest:
+      type: object
+      required:
+        - accounts
+        - merge_by
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountRecord'
+          minItems: 1
+          maxItems: 100
+          description: Array of account records (1-100 max)
+        merge_by:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          description: Field IDs specifying which account fields determine create vs. update logic. Required (no defaults). If merging by account ID, it must be the only field.
+          example: ["str:o:website"]
+        merge_strategy:
+          type: integer
+          enum: [1, 2, 3]
+          default: 2
+          description: |
+            Controls how existing values merge:
+            - 1: Append Only - Add new values but don't overwrite existing ones
+            - 2: Overwrite Existing - Replace existing values with new ones (default)
+            - 3: Ignore - Keep existing values, ignore new ones
+        find_strategy:
+          type: integer
+          enum: [0, 1]
+          default: 0
+          description: |
+            For dual merge fields:
+            - 0: Any - Match if any of the merge_by fields match (default)
+            - 1: First Only - Match only if first field matches; check second field only if first is empty
+        async:
+          type: boolean
+          default: false
+          description: Queue ingestion when true; receive immediate confirmation
+
+    MergeAccountsResponseAccount:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [created, merged]
+          description: Whether the account was newly created or merged with existing
+        account_id:
+          type: string
+          description: Unique identifier for the account
+
+    MergeAccountsResponse:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/MergeAccountsResponseAccount'
 
 paths:
   /person/merge:
@@ -1455,6 +1549,194 @@ paths:
           description: Bad request
         '401':
           description: Unauthorized
+
+  /v1/accounts/merge:
+    post:
+      tags:
+        - Accounts
+      summary: Create or update organizations
+      description: |
+        Create or update one or more organization (account) records in Ortto's CDP.
+
+        **Important notes:**
+        - Supports batch operations (1-100 accounts per request)
+        - `merge_by` parameter is **required** (unlike person endpoints, no defaults exist)
+        - If merging by account ID, it must be the only field in `merge_by`
+        - Use `async: true` for better performance with large volumes
+        - Merge behavior determined by `merge_strategy`
+        - Tags applied regardless of create/update status
+
+        **Account field format:** `type:namespace:field-name`
+        - Built-in fields use namespace `o`: `str:o:name`, `int:o:employees`, etc.
+        - Custom fields use namespace `oc`: `str:oc:custom-field`
+        - Geographic fields require object with `name` member: `{"name": "San Francisco"}`
+
+      operationId: mergeAccounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MergeAccountsRequest'
+            examples:
+              createSingle:
+                summary: Create single account
+                description: Create a new organization with basic details
+                value:
+                  accounts:
+                    - fields:
+                        str:o:name: "Acme Corporation"
+                        str:o:website: "https://acme.com"
+                        int:o:employees: 150
+                        str:o:industry: "Technology"
+                  merge_by: ["str:o:website"]
+                  merge_strategy: 2
+                  async: false
+
+              updateExisting:
+                summary: Update existing account
+                description: Update an existing organization by website
+                value:
+                  accounts:
+                    - fields:
+                        str:o:name: "Acme Corp (Updated)"
+                        str:o:website: "https://acme.com"
+                        int:o:employees: 200
+                  merge_by: ["str:o:website"]
+                  merge_strategy: 2
+
+              bulkCreateUpdate:
+                summary: Bulk create/update accounts
+                description: Create or update multiple organizations in one request
+                value:
+                  accounts:
+                    - fields:
+                        str:o:name: "Delta Corp"
+                        str:o:website: "https://delta.com"
+                    - fields:
+                        str:o:name: "Epsilon LLC"
+                        str:o:website: "https://epsilon.com"
+                    - fields:
+                        str:o:name: "Zeta Group"
+                        str:o:website: "https://zeta.com"
+                  merge_by: ["str:o:website"]
+
+              appendOnlyStrategy:
+                summary: Append-only merge strategy
+                description: Add new values without overwriting existing data
+                value:
+                  accounts:
+                    - fields:
+                        str:o:name: "Beta Inc"
+                        str:o:website: "https://beta.com"
+                        str:o:industry: "SaaS"
+                  merge_by: ["str:o:website"]
+                  merge_strategy: 1
+
+              overwriteStrategy:
+                summary: Overwrite merge strategy
+                description: Replace all existing values with new data (default)
+                value:
+                  accounts:
+                    - fields:
+                        str:o:name: "Gamma Ltd"
+                        str:o:website: "https://gamma.com"
+                        int:o:employees: 50
+                  merge_by: ["str:o:website"]
+                  merge_strategy: 2
+
+              ignoreStrategy:
+                summary: Ignore merge strategy
+                description: Keep existing values, only use new values if field is empty
+                value:
+                  accounts:
+                    - fields:
+                        str:o:name: "Theta Co"
+                        str:o:website: "https://theta.com"
+                        str:o:industry: "Finance"
+                  merge_by: ["str:o:website"]
+                  merge_strategy: 3
+
+              withTags:
+                summary: Account with tags
+                description: Create/update account and manage tags
+                value:
+                  accounts:
+                    - fields:
+                        str:o:name: "Iota Systems"
+                        str:o:website: "https://iota.com"
+                      tags: ["enterprise", "tech", "partner"]
+                      unset_tags: ["prospect"]
+                  merge_by: ["str:o:website"]
+
+              withGeographicFields:
+                summary: Account with geographic fields
+                description: Create account with city, region, country fields
+                value:
+                  accounts:
+                    - fields:
+                        str:o:name: "Kappa Industries"
+                        str:o:website: "https://kappa.com"
+                        geo:o:city:
+                          name: "San Francisco"
+                        geo:o:region:
+                          name: "California"
+                        geo:o:country:
+                          name: "United States"
+                        str:o:postal: "94102"
+                  merge_by: ["str:o:website"]
+
+              multipleMergeFields:
+                summary: Multiple merge-by fields
+                description: Use fallback merge keys with find strategy
+                value:
+                  accounts:
+                    - fields:
+                        str:o:name: "Lambda Corp"
+                        str:o:website: "https://lambda.com"
+                  merge_by: ["str:o:website", "str:o:name"]
+                  find_strategy: 0
+
+      responses:
+        '200':
+          description: Accounts created or updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MergeAccountsResponse'
+              examples:
+                created:
+                  summary: New account created
+                  value:
+                    accounts:
+                      - status: "created"
+                        account_id: "507f1f77bcf86cd799439011"
+                merged:
+                  summary: Existing account merged
+                  value:
+                    accounts:
+                      - status: "merged"
+                        account_id: "507f1f77bcf86cd799439012"
+                bulk:
+                  summary: Bulk operation response
+                  value:
+                    accounts:
+                      - status: "created"
+                        account_id: "507f1f77bcf86cd799439011"
+                      - status: "merged"
+                        account_id: "507f1f77bcf86cd799439012"
+                      - status: "created"
+                        account_id: "507f1f77bcf86cd799439013"
+        '400':
+          description: Bad request (invalid parameters, missing required fields)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized (invalid API key)
+        '500':
+          description: Internal server error
 
   /instance-schema/get:
     post:
