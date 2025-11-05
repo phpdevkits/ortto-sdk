@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Wed, 05 Nov 2025 22:51:18 GMT",
+        "Content-Type": "application\/json",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"fields\":[{\"field\":{\"id\":\"str:cm:test-select-1762383075\",\"name\":\"Test Select 1762383075\",\"display_type\":\"single_select\",\"liquid_name\":\"people.custom.test-select-1762383075\",\"dic_items\":[\"Option A\",\"Option B\",\"Option C\"]},\"tracked_value\":false},{\"field\":{\"id\":\"str:cm:test-field-1762382978\",\"name\":\"Test Field 1762382978\",\"display_type\":\"text\",\"liquid_name\":\"people.custom.test-field-1762382978\"},\"tracked_value\":true},{\"field\":{\"id\":\"str:cm:sdk-test-1762379719\",\"name\":\"SDK Test 1762379719\",\"display_type\":\"text\",\"liquid_name\":\"people.custom.sdk-test-1762379719\"},\"tracked_value\":true},{\"field\":{\"id\":\"str:cm:test-field-1762383076\",\"name\":\"Test Field 1762383076\",\"display_type\":\"text\",\"liquid_name\":\"people.custom.test-field-1762383076\"},\"tracked_value\":true},{\"field\":{\"id\":\"str:cm:job-title\",\"name\":\"Job Title\",\"display_type\":\"text\",\"liquid_name\":\"people.custom.job-title\"},\"tracked_value\":true},{\"field\":{\"id\":\"str:cm:test-field-1762382984\",\"name\":\"Test Field 1762382984\",\"display_type\":\"text\",\"liquid_name\":\"people.custom.test-field-1762382984\"},\"tracked_value\":true},{\"field\":{\"id\":\"str:cm:test-select-1762382977\",\"name\":\"Test Select 1762382977\",\"display_type\":\"single_select\",\"liquid_name\":\"people.custom.test-select-1762382977\",\"dic_items\":[\"Option A\",\"Option B\",\"Option C\"]},\"tracked_value\":false},{\"field\":{\"id\":\"str:cm:sdk-select-1762379720\",\"name\":\"SDK Select 1762379720\",\"display_type\":\"single_select\",\"liquid_name\":\"people.custom.sdk-select-1762379720\",\"dic_items\":[\"Option A\",\"Option B\",\"Option C\"]},\"tracked_value\":false},{\"field\":{\"id\":\"str:cm:sdk-test-select-field\",\"name\":\"SDK Test Select Field\",\"display_type\":\"single_select\",\"liquid_name\":\"people.custom.sdk-test-select-field\",\"dic_items\":[\"New A\",\"New B\",\"New C\",\"New D\"]},\"tracked_value\":false},{\"field\":{\"id\":\"str:cm:sdk-test-text-field\",\"name\":\"SDK Test Text Field\",\"display_type\":\"text\",\"liquid_name\":\"people.custom.sdk-test-text-field\"},\"tracked_value\":false},{\"field\":{\"id\":\"str:cm:test-field\",\"name\":\"Test Field\",\"display_type\":\"text\",\"liquid_name\":\"people.custom.test-field\"},\"tracked_value\":true},{\"field\":{\"id\":\"str:cm:test-select\",\"name\":\"Test Select\",\"display_type\":\"single_select\",\"liquid_name\":\"people.custom.test-select\",\"dic_items\":[\"Option A\",\"Option B\",\"Option C\"]},\"tracked_value\":false}]}\n",
+    "context": []
+}

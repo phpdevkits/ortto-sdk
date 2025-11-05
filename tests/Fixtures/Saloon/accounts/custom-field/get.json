@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Wed, 05 Nov 2025 22:51:17 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "1084",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"fields\":[{\"id\":\"str:oc:account-field-1762382983\",\"name\":\"Account Field 1762382983\",\"display_type\":\"text\",\"liquid_name\":\"account.custom.account-field-1762382983\"},{\"id\":\"str:oc:sdk-account-1762379720\",\"name\":\"SDK Account 1762379720\",\"display_type\":\"text\",\"liquid_name\":\"account.custom.sdk-account-1762379720\"},{\"id\":\"str:oc:sdk-test-account-field\",\"name\":\"SDK Test Account Field\",\"display_type\":\"text\",\"liquid_name\":\"account.custom.sdk-test-account-field\"},{\"id\":\"str:oc:test-account-field\",\"name\":\"Test Account Field\",\"display_type\":\"text\",\"liquid_name\":\"account.custom.test-account-field\"},{\"id\":\"str:oc:test-account-field-1762382977\",\"name\":\"Test Account Field 1762382977\",\"display_type\":\"text\",\"liquid_name\":\"account.custom.test-account-field-1762382977\"},{\"id\":\"str:oc:test-account-field-1762383074\",\"name\":\"Test Account Field 1762383074\",\"display_type\":\"text\",\"liquid_name\":\"account.custom.test-account-field-1762383074\"},{\"id\":\"str:oc:account-field-1762381937\",\"name\":\"Account Field 1762381937\",\"display_type\":\"text\",\"liquid_name\":\"account.custom.account-field-1762381937\"}]}\n",
+    "context": []
+}

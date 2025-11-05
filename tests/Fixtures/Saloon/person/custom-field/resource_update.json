@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Wed, 05 Nov 2025 22:51:21 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "109",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"field_id\":\"str:cm:sdk-test-select-field\",\"values\":[\"New A\",\"New B\",\"New C\",\"New D\"],\"track_changes\":false}\n",
+    "context": []
+}

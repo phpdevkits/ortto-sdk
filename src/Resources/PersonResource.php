@@ -21,6 +21,14 @@ use Throwable;
 class PersonResource extends BaseResource
 {
     /**
+     * Access Person custom field operations
+     */
+    public function customField(): PersonCustomFieldResource
+    {
+        return new PersonCustomFieldResource(connector: $this->connector);
+    }
+
+    /**
      * @param  string[]|null  $inclusionIds
      * @param  string[]|null  $exclusionIds
      *

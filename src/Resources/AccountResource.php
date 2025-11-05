@@ -11,6 +11,14 @@ use Throwable;
 class AccountResource extends BaseResource
 {
     /**
+     * Access Account custom field operations
+     */
+    public function customField(): AccountCustomFieldResource
+    {
+        return new AccountCustomFieldResource(connector: $this->connector);
+    }
+
+    /**
      * Get instance schema for one or more namespaces.
      *
      * @param  array<int, AccountNamespace|string>  $namespaces  Array of namespace IDs. Empty array returns all namespaces.
