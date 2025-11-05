@@ -1,0 +1,16 @@
+{
+    "statusCode": 400,
+    "headers": {
+        "Date": "Wed, 05 Nov 2025 07:13:03 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "109",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"request_id\":\"6556973e-8a4c-432d-afce-e539acd57d88\",\"code\":400,\"error\":\"One or more attributes is invalid\"}\n",
+    "context": []
+}

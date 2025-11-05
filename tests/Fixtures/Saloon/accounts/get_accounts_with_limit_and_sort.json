@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Wed, 05 Nov 2025 07:13:02 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "337",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"accounts\":[{\"id\":\"106904f4fd2dad244ea03100\",\"fields\":{\"str:o:name\":\"Between Dynamic\"}},{\"id\":\"106905f9252dad244f055800\",\"fields\":{\"str:o:name\":\"PhpDevKits\"}}],\"meta\":{\"total_contacts\":0,\"total_organizations\":2,\"total_matches\":2,\"total_subscribers\":0},\"offset\":0,\"next_offset\":2,\"cursor_id\":\"10690af8feb8a933bf960a09\",\"has_more\":false}\n",
+    "context": []
+}
