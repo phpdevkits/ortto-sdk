@@ -27,7 +27,8 @@
             "recurly",
             "shopify",
             "typeform",
-            "zendesk"
+            "zendesk",
+            "geocode"
         ],
         "paths": [
             "docs"

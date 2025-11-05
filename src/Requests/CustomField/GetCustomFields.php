@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PhpDevKits\Ortto\Requests\CustomField;
 
 use Saloon\Contracts\Body\HasBody;
