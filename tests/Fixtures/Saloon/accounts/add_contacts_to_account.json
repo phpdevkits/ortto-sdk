@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Wed, 05 Nov 2025 08:46:18 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "2",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{}",
+    "context": []
+}
