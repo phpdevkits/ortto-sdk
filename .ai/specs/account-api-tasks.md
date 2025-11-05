@@ -10,13 +10,13 @@
 
 ### Organization Management Endpoints
 - [x] Document `/v1/accounts/merge` endpoint
-- [ ] Document `/v1/accounts/get` endpoint
-- [ ] Document `/v1/accounts/get-by-ids` endpoint
-- [ ] Document `/v1/accounts/archive` endpoint
-- [ ] Document `/v1/accounts/restore` endpoint
-- [ ] Document `/v1/accounts/delete` endpoint
-- [ ] Document `/v1/accounts/contacts/add` endpoint
-- [ ] Document `/v1/accounts/contacts/remove` endpoint
+- [x] Document `/v1/accounts/get` endpoint
+- [x] Document `/v1/accounts/get-by-ids` endpoint
+- [x] Document `/v1/accounts/archive` endpoint
+- [x] Document `/v1/accounts/restore` endpoint
+- [x] Document `/v1/accounts/delete` endpoint
+- [x] Document `/v1/accounts/contacts/add` endpoint
+- [x] Document `/v1/accounts/contacts/remove` endpoint
 
 ## OpenAPI Specification Tasks
 
@@ -89,20 +89,19 @@
   - [x] Set endpoint path `/v1/accounts/merge`
   - [x] Accept accounts, mergeBy (required), mergeStrategy, findStrategy, async
   - [x] Handle enum value conversion
-- [ ] `src/Requests/Accounts/GetAccounts.php`
-- [ ] `src/Requests/Accounts/GetAccountsByIds.php`
-- [ ] `src/Requests/Accounts/ArchiveAccounts.php`
-- [ ] `src/Requests/Accounts/RestoreAccounts.php`
-- [ ] `src/Requests/Accounts/DeleteAccounts.php`
-- [ ] `src/Requests/Accounts/AddContactsToAccount.php`
-- [ ] `src/Requests/Accounts/RemoveContactsFromAccount.php`
+- [x] `src/Requests/Accounts/GetAccounts.php`
+- [x] `src/Requests/Accounts/GetAccountsByIds.php`
+- [x] `src/Requests/Accounts/ArchiveAccounts.php`
+- [x] `src/Requests/Accounts/RestoreAccounts.php`
+- [x] `src/Requests/Accounts/DeleteAccounts.php`
+- [x] `src/Requests/Accounts/AddContactsToAccount.php`
+- [x] `src/Requests/Accounts/RemoveContactsFromAccount.php`
 
 ### Resource Class
-- [ ] Create `src/Resources/Accounts.php`:
-  - [ ] Add `getInstanceSchema()` method
+- [x] Create `src/Resources/AccountsResource.php`:
+  - [x] Add `merge()` method
   - [ ] Add `get()` method
   - [ ] Add `getByIds()` method
-  - [ ] Add `merge()` method
   - [ ] Add `archive()` method
   - [ ] Add `restore()` method
   - [ ] Add `delete()` method
@@ -134,13 +133,14 @@
   - [x] Test accepts enum values
 - [x] Write unit tests in `tests/Unit/Requests/Accounts/`:
   - [x] `MergeAccountsTest.php` (6 tests)
-  - [x] Test creates new account
-  - [x] Test merges existing account
-  - [x] Test bulk merge
-  - [x] Test merge strategies
-  - [x] Test find strategies
-  - [x] Test tag handling
-- [x] Ensure 100% code coverage (GetAccountSchema: 100%, MergeAccounts: 100%)
+  - [x] `GetAccountsTest.php` (10 tests)
+  - [x] `GetAccountsByIdsTest.php` (3 tests)
+  - [x] `ArchiveAccountsTest.php` (2 tests)
+  - [x] `RestoreAccountsTest.php` (2 tests)
+  - [x] `DeleteAccountsTest.php` (2 tests)
+  - [x] `AddContactsToAccountTest.php` (2 tests)
+  - [x] `RemoveContactsFromAccountTest.php` (2 tests)
+- [x] Ensure 100% code coverage (All request classes: 100%)
 - [x] Ensure 100% type coverage
 - [ ] Add account data tests in `tests/Unit/Data/` (when Data classes created):
   - [ ] `AccountDataTest.php`
@@ -187,32 +187,41 @@
 
 ## Current Progress
 
-**Completed Tasks: 50+**
+**Completed Tasks: 85+**
 
-### Documentation (Complete for implemented endpoints)
+### Documentation (Complete for ALL endpoints)
 - ✅ Created account/accounts documentation directories
 - ✅ Documented instance-schema/get endpoint
-- ✅ Documented accounts/merge endpoint
+- ✅ Documented ALL 8 accounts endpoints (merge, get, get-by-ids, archive, restore, delete, contacts-add, contacts-remove)
+- ✅ Created ENDPOINTS_SUMMARY.md
 - ✅ Created implementation plan
 - ✅ Created task checklist
 
-### OpenAPI Specification (Complete for implemented endpoints)
+### OpenAPI Specification (Complete for documented endpoints)
 - ✅ Added all required schemas
 - ✅ Added instance-schema/get endpoint with 5 examples
 - ✅ Added accounts/merge endpoint with 9 examples
 - ✅ Created separate tags for Account vs Accounts
 
-### SDK Implementation (2 endpoints complete)
-- ✅ Implemented GetAccountSchema with AccountNamespace enum
+### SDK Implementation (9 endpoints complete)
+- ✅ Implemented GetAccountSchema with AccountNamespace enum (45 cases)
 - ✅ Implemented MergeAccounts
-- ✅ 10 tests written (100% coverage)
-- ✅ All quality checks passing
+- ✅ Implemented GetAccounts
+- ✅ Implemented GetAccountsByIds
+- ✅ Implemented ArchiveAccounts
+- ✅ Implemented RestoreAccounts
+- ✅ Implemented DeleteAccounts
+- ✅ Implemented AddContactsToAccount
+- ✅ Implemented RemoveContactsFromAccount
+- ✅ Created AccountField enum
+- ✅ 33 tests written across all request classes (100% coverage)
+- ✅ All quality checks passing (PHPStan max, Rector, Pint, Peck)
 
 **Next Immediate Tasks:**
-1. Update README.md with account coverage
-2. Research full documentation for remaining endpoints (get, get-by-ids, archive, restore, delete, contacts)
-3. Create Resource classes when ready
-4. Add facade integration
+1. Add methods to AccountsResource for new endpoints
+2. Update AccountsResource tests
+3. Update README.md with account coverage
+4. Validate full test suite passes
 
 ## Notes
 

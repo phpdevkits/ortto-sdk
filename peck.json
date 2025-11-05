@@ -13,6 +13,7 @@
             "asc",
             "desc",
             "param",
+            "ids",
             "birthdate",
             "subclasses",
             "timeframe",
