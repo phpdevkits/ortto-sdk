@@ -1,9 +1,9 @@
 {
-    "statusCode": 400,
+    "statusCode": 200,
     "headers": {
-        "Date": "Wed, 05 Nov 2025 07:16:36 GMT",
+        "Date": "Wed, 05 Nov 2025 08:25:03 GMT",
         "Content-Type": "application\/json",
-        "Content-Length": "215",
+        "Content-Length": "113",
         "Connection": "keep-alive",
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
         "Access-Control-Allow-Origin": "*",
@@ -11,6 +11,6 @@
         "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
         "X-Version": "master-2511042321-1782-f1477bc"
     },
-    "data": "{\"request_id\":\"19b04b5e-bda1-4e2d-a244-1aa21b1f90b9\",\"code\":400,\"error\":\"betweendynamic: Failed to parse request cannot unmarshal into an ID, the length must be 12 or 24 + 2 for hex but it is 16: Object not found\"}\n",
+    "data": "{\"accounts\":{\"106905f9252dad244f055800\":{\"id\":\"106905f9252dad244f055800\",\"fields\":{\"str:o:name\":\"PhpDevKits\"}}}}\n",
     "context": []
 }

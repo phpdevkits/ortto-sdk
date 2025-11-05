@@ -173,6 +173,13 @@ $response = $this->ortto
 - Newest tests first, oldest tests last (reverse chronological order)
 - Use descriptive test names in snake_case
 - Fixture names should match test purpose
+- **ALWAYS use enums in tests** instead of magic strings:
+  - Use `PersonField::Email->value` instead of `'str::email'`
+  - Use `MergeStrategy::OverwriteExisting` instead of `2`
+  - Use `FindStrategy::Any` instead of `0`
+  - Use `ActivityTimeframe::Last7Days` instead of `'last-7-days'`
+  - Use `SortOrder::Asc` instead of `'asc'`
+  - This improves code readability, type safety, and IDE autocomplete
 
 ### Ortto API Field Requirements
 

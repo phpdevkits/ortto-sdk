@@ -1,5 +1,6 @@
 <?php
 
+use PhpDevKits\Ortto\Enums\AccountField;
 use PhpDevKits\Ortto\Enums\SortOrder;
 use PhpDevKits\Ortto\Ortto;
 use PhpDevKits\Ortto\Requests\Accounts\GetAccounts;
@@ -23,7 +24,7 @@ test('gets accounts with basic fields',
             ->withMockClient($mockClient)
             ->send(
                 new GetAccounts(
-                    fields: ['str:o:name', 'str:o:website'],
+                    fields: [AccountField::Name->value, AccountField::Website->value],
                 ),
             );
 
@@ -49,7 +50,7 @@ test('gets accounts with limit and sorting',
             ->send(
                 new GetAccounts(
                     limit: 10,
-                    sortByFieldId: 'str:o:name',
+                    sortByFieldId: AccountField::Name->value,
                     sortOrder: SortOrder::Asc,
                     fields: ['str:o:name', 'str:o:website'],
                 ),
@@ -78,7 +79,7 @@ test('gets accounts with pagination offset',
                 new GetAccounts(
                     limit: 50,
                     offset: 100,
-                    fields: ['str:o:name'],
+                    fields: [AccountField::Name->value],
                 ),
             );
 
@@ -106,7 +107,7 @@ test('gets accounts with cursor pagination',
             ->send(
                 new GetAccounts(
                     cursorId: '0069061b5bda4060a576',
-                    fields: ['str:o:name'],
+                    fields: [AccountField::Name->value],
                 ),
             );
 
@@ -152,7 +153,7 @@ test('gets accounts with type filter for archived',
             ->withMockClient($mockClient)
             ->send(
                 new GetAccounts(
-                    fields: ['str:o:name'],
+                    fields: [AccountField::Name->value],
                     type: 'archived_account',
                 ),
             );
@@ -175,7 +176,7 @@ test('gets accounts with filter',
             ->withMockClient($mockClient)
             ->send(
                 new GetAccounts(
-                    fields: ['str:o:name', 'int:o:employees'],
+                    fields: [AccountField::Name->value, AccountField::Employees->value],
                     filter: [
                         '$has_any_value' => [
                             'field_id' => 'geo:o:country',
@@ -203,7 +204,7 @@ test('gets accounts with complex filter',
             ->withMockClient($mockClient)
             ->send(
                 new GetAccounts(
-                    fields: ['str:o:name', 'int:o:employees'],
+                    fields: [AccountField::Name->value, AccountField::Employees->value],
                     filter: [
                         '$and' => [
                             [
@@ -239,7 +240,7 @@ test('gets accounts with inclusion ids',
             ->withMockClient($mockClient)
             ->send(
                 new GetAccounts(
-                    fields: ['str:o:name'],
+                    fields: [AccountField::Name->value],
                     inclusionIds: ['account-id-123', 'account-id-456'],
                 ),
             );
@@ -262,7 +263,7 @@ test('gets accounts with exclusion ids',
             ->withMockClient($mockClient)
             ->send(
                 new GetAccounts(
-                    fields: ['str:o:name'],
+                    fields: [AccountField::Name->value],
                     exclusionIds: ['account-id-789'],
                 ),
             );

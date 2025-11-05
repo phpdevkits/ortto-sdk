@@ -1,5 +1,6 @@
 <?php
 
+use PhpDevKits\Ortto\Enums\AccountField;
 use PhpDevKits\Ortto\Ortto;
 use PhpDevKits\Ortto\Requests\Accounts\GetAccountsByIds;
 use Saloon\Http\Faking\MockClient;
@@ -22,14 +23,22 @@ test('gets accounts by single id',
             ->withMockClient($mockClient)
             ->send(
                 new GetAccountsByIds(
-                    accountIds: ['507f1f77bcf86cd799439011'],
-                    fields: ['str:o:name', 'str:o:website'],
+                    accountIds: ['106905f9252dad244f055800'],
+                    fields: [AccountField::Name->value, AccountField::Website->value],
                 ),
             );
 
-        // May return 400 if account IDs don't exist or have invalid format
         expect($response->status())
-            ->toBeIn([200, 400]);
+            ->toBe(200)
+            ->and($response->json())
+            ->toHaveKey('accounts')
+            ->and($response->json('accounts'))
+            ->toBeArray()
+            ->and($response->json('accounts.106905f9252dad244f055800'))
+            ->toBeArray()
+            ->toHaveKey('id')
+            ->and($response->json('accounts.106905f9252dad244f055800.id'))
+            ->toBe('106905f9252dad244f055800');
     });
 
 test('gets accounts by multiple ids',
@@ -45,14 +54,18 @@ test('gets accounts by multiple ids',
             ->withMockClient($mockClient)
             ->send(
                 new GetAccountsByIds(
-                    accountIds: ['507f1f77bcf86cd799439011', '507f1f77bcf86cd799439012', '507f1f77bcf86cd799439013'],
-                    fields: ['str:o:name', 'str:o:website', 'int:o:employees'],
+                    accountIds: ['106905f9252dad244f055800', '106904f4fd2dad244ea03100'],
+                    fields: [AccountField::Name->value],
                 ),
             );
 
-        // May return 400 if account IDs don't exist or have invalid format
         expect($response->status())
-            ->toBeIn([200, 400]);
+            ->toBe(200)
+            ->and($response->json())
+            ->toHaveKey('accounts')
+            ->and($response->json('accounts'))
+            ->toBeArray()
+            ->toHaveCount(2);
     });
 
 test('gets accounts with specific fields only',
@@ -68,12 +81,15 @@ test('gets accounts with specific fields only',
             ->withMockClient($mockClient)
             ->send(
                 new GetAccountsByIds(
-                    accountIds: ['507f1f77bcf86cd799439011'],
-                    fields: ['str:o:name'],
+                    accountIds: ['106905f9252dad244f055800'],
+                    fields: [AccountField::Name->value],
                 ),
             );
 
-        // May return 400 if account IDs don't exist or have invalid format
         expect($response->status())
-            ->toBeIn([200, 400]);
+            ->toBe(200)
+            ->and($response->json())
+            ->toHaveKey('accounts')
+            ->and($response->json('accounts.106905f9252dad244f055800.fields'))
+            ->toHaveKey(AccountField::Name->value);
     });
