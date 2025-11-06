@@ -104,6 +104,25 @@ When implementing or modifying SDK endpoints, always refer to the corresponding 
 
 ## Code Quality Standards
 
+### Code Style Conventions
+
+**Enum Definitions**:
+- Enum cases should NOT include individual PHPDoc comments
+- Use a single class-level PHPDoc comment describing the enum's purpose
+- Example:
+  ```php
+  /**
+   * Activity icon identifiers
+   *
+   * @see https://help.ortto.com/...
+   */
+  enum ActivityIcon: string
+  {
+      case Calendar = 'calendar-illustration-icon';
+      case Email = 'email-illustration-icon';
+  }
+  ```
+
 ### PHPStan Configuration
 - **Level**: max
 - **Scope**: `src/` directory only
@@ -191,6 +210,12 @@ $response = $this->ortto
 1. Makes a real API call to Ortto
 2. Records the response as a JSON fixture in `tests/Fixtures/Saloon/`
 3. Uses the recorded fixture for subsequent test runs
+
+**IMPORTANT**:
+- **NEVER create fixture files manually**
+- Always let Saloon's MockClient auto-record fixtures from real API calls
+- If API calls fail during fixture recording, fix the test data or API configuration
+- Manual fixture creation leads to incorrect test responses and false positives
 
 **Test Organization**:
 - Tests related to Request classes should be placed in `tests/Unit/Requests/` directory

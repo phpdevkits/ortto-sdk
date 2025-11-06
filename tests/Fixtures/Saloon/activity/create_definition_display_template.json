@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Thu, 06 Nov 2025 00:07:16 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "694",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"custom_activity\":{\"name\":\"sdk-test-template-v3\",\"activity_field_id\":\"act:cm:sdk-test-template-v3\",\"state\":\"awaiting_implementation\",\"display_mode\":{\"type\":\"activity\"},\"attributes\":[{\"name\":\"item-name\",\"field_id\":\"str:cm:item-name\",\"display_type\":\"text\",\"liquid_name\":\"activity.custom.sdk-test-template-v3.item-name\"},{\"name\":\"item-count\",\"field_id\":\"int:cm:item-count\",\"display_type\":\"integer\",\"liquid_name\":\"activity.custom.sdk-test-template-v3.item-count\"}],\"icon_id\":\"download-illustration-icon\",\"track_conversion_value\":false,\"touch\":true,\"filterable\":true,\"visible_in_feeds\":true,\"created_by\":\"Public API\",\"created_at\":\"2025-11-06T00:07:16.186Z\",\"edited_at\":\"2025-11-06T00:07:16.186Z\"}}\n",
+    "context": []
+}

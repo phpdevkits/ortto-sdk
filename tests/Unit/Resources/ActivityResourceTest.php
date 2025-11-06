@@ -10,6 +10,95 @@ beforeEach(function (): void {
     $this->ortto = new Ortto;
 });
 
+test('createDefinition creates activity definition',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+        $mockClient = new MockClient([
+            \PhpDevKits\Ortto\Requests\Activity\CreateActivityDefinition::class => MockResponse::fixture('activity/create_definition_resource'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->activity()
+            ->createDefinition(
+                definition: [
+                    'name' => 'sdk-test-simple',
+                    'icon_id' => 'flag-activities-illustration-icon',
+                    'track_conversion_value' => false,
+                    'touch' => true,
+                    'filterable' => true,
+                    'visible_in_feeds' => true,
+                    'display_style' => ['type' => 'activity'],
+                    'attributes' => [],
+                ],
+            );
+
+        expect($response->status())
+            ->toBe(200);
+    });
+
+test('createDefinition creates with data object',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+        $mockClient = new MockClient([
+            \PhpDevKits\Ortto\Requests\Activity\CreateActivityDefinition::class => MockResponse::fixture('activity/create_definition_resource_data'),
+        ]);
+
+        $definition = new \PhpDevKits\Ortto\Data\ActivityDefinitionData(
+            name: 'test-activity-data-obj',
+            iconId: \PhpDevKits\Ortto\Enums\ActivityIcon::Happy,
+            trackConversionValue: false,
+            touch: true,
+            filterable: true,
+            visibleInFeeds: true,
+            displayStyle: ['type' => 'activity'],
+            attributes: [],
+        );
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->activity()
+            ->createDefinition(definition: $definition);
+
+        expect($response->status())
+            ->toBe(200);
+    });
+
+test('createDefinition creates with array',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+        $mockClient = new MockClient([
+            \PhpDevKits\Ortto\Requests\Activity\CreateActivityDefinition::class => MockResponse::fixture('activity/create_definition_resource_array'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->activity()
+            ->createDefinition(
+                definition: [
+                    'name' => 'support-ticket',
+                    'icon_id' => 'phone-illustration-icon',
+                    'track_conversion_value' => false,
+                    'touch' => true,
+                    'filterable' => true,
+                    'visible_in_feeds' => true,
+                    'display_style' => [
+                        'type' => 'activity',
+                    ],
+                    'attributes' => [],
+                ],
+            );
+
+        expect($response->status())
+            ->toBe(200);
+    });
+
 test('create creates activity',
     /**
      * @throws Throwable

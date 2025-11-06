@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Thu, 06 Nov 2025 00:02:56 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "402",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"custom_activity\":{\"name\":\"support-ticket\",\"activity_field_id\":\"act:cm:support-ticket\",\"state\":\"awaiting_implementation\",\"display_mode\":{\"type\":\"activity\"},\"attributes\":[],\"icon_id\":\"phone-illustration-icon\",\"track_conversion_value\":false,\"touch\":true,\"filterable\":true,\"visible_in_feeds\":true,\"created_by\":\"Public API\",\"created_at\":\"2025-11-06T00:02:56.439Z\",\"edited_at\":\"2025-11-06T00:02:56.439Z\"}}\n",
+    "context": []
+}
