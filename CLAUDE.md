@@ -184,6 +184,68 @@ When implementing new Ortto API endpoints:
 6. Use type-safe arrays and DTOs for request/response data
 7. Follow Saloon best practices for authentication, middleware, and error handling
 
+### Exception Documentation with @throws
+
+**PHPDoc @throws Annotations:**
+All methods that can throw exceptions MUST document them with `@throws` annotations. This is automatically enforced by PHPStan for source code.
+
+**For Source Code (`src/`):**
+- Resource methods calling `$this->connector->send()` MUST have `@throws Throwable`
+- Any method that can throw exceptions MUST document them
+- PHPStan enforces this automatically via `exceptions.check.missingCheckedExceptionInThrows: true`
+- All exceptions are checked by default (not just specific ones)
+
+**For Test Code (`tests/`):**
+- Test functions calling Resource methods MUST have `@throws Throwable`
+- Test functions calling `$ortto->send()` MUST have `@throws Throwable`
+- Annotation placed in PHPDoc between test name and function declaration
+- **NOT automatically enforced** - PHPStan cannot properly analyze PEST test syntax
+- Relies on code review and developer discipline
+
+**Example (Source Code):**
+```php
+/**
+ * Create custom activity events for contacts.
+ *
+ * @param  array<int, array<string, mixed>>  $activities
+ * @param  bool  $async
+ * @throws Throwable
+ */
+public function create(array $activities, bool $async = false): Response
+{
+    return $this->connector->send(
+        request: new CreateActivities(
+            activities: $activities,
+            async: $async,
+        ),
+    );
+}
+```
+
+**Example (Test Code):**
+```php
+test('creates activity with person id',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+        $mockClient = new MockClient([
+            CreateActivities::class => MockResponse::fixture('activity/create_activities'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->send(new CreateActivities(...));
+
+        expect($response->status())->toBe(200);
+    });
+```
+
+**Enforcement:**
+- PHPStan will error during `composer test:types` if `@throws` is missing from `src/` files
+- Test files must be checked manually during code review
+- This is a limitation of PHPStan's compatibility with PEST's test syntax
+
 ### Resource Class Organization
 
 **Method Ordering**:

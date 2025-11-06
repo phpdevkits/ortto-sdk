@@ -47,11 +47,13 @@
   - [ ] Use HasJsonBody trait
   - [ ] defaultBody() method (conditional)
   - [ ] Add PHPDoc annotations
+  - [ ] **Add `@throws Throwable` annotation** (for methods calling send())
 - [ ] Create `tests/Unit/Requests/Tag/GetTagsTest.php`
   - [ ] Test get all tags (empty body)
   - [ ] Test get with search parameter
   - [ ] Use MockClient with fixtures
   - [ ] **MANDATORY: Use TagSource/TagType enums in assertions**
+  - [ ] **MANDATORY: Add `@throws Throwable` to each test function**
   - [ ] Verify request body structure
 
 ### Resource Class
@@ -60,10 +62,12 @@
   - [ ] Implement `get(?string $q = null): Response`
   - [ ] Send GetTags request via connector
   - [ ] Add PHPDoc annotations
+  - [ ] **Add `@throws Throwable` annotation** (automatically enforced by PHPStan)
 - [ ] Create `tests/Unit/Resources/TagResourceTest.php`
   - [ ] Test get() method without search
   - [ ] Test get() method with search
   - [ ] **MANDATORY: Use TagSource/TagType enums in test data**
+  - [ ] **MANDATORY: Add `@throws Throwable` to each test function**
   - [ ] Verify response structure
 
 ### Connector Integration
@@ -72,6 +76,7 @@
   - [ ] Add `tag(): TagResource` method
   - [ ] Support config override pattern
   - [ ] Follow activity()/person()/account() pattern
+  - [ ] **Add `@throws InvalidArgumentException` annotation** (automatically enforced by PHPStan)
 
 ### Documentation
 - [ ] Create `.ai/ortto/tag/get.md`
@@ -83,8 +88,9 @@
 ## Phase 3: Testing & Quality Assurance
 
 ### Test Fixtures
-- [ ] Auto-record `tests/Fixtures/Saloon/tag/get_tags_all.json`
-- [ ] Auto-record `tests/Fixtures/Saloon/tag/get_tags_with_search.json`
+- [ ] Auto-record `tests/Fixtures/Saloon/tag/get_tags_all.json` (via MockClient)
+- [ ] Auto-record `tests/Fixtures/Saloon/tag/get_tags_with_search.json` (via MockClient)
+- [ ] **NEVER create fixture files manually** - let Saloon auto-record from real API calls
 
 ### Quality Checks
 - [ ] Run `composer test:lint` - Pint formatting check
@@ -112,7 +118,10 @@
 ### Git & Commit
 - [ ] Review all changes with `git diff`
 - [ ] Stage all files with `git add .`
-- [ ] Commit with descriptive message (no Claude footer)
+- [ ] Commit with descriptive message
+  - [ ] **DO NOT include `Co-Authored-By` trailers**
+  - [ ] **DO NOT include "Generated with Claude Code" or AI attribution**
+  - [ ] Commits should appear as regular human contributions
 - [ ] Verify commit with `git log -1`
 
 ### Documentation Update
@@ -146,6 +155,8 @@
 
 ### Critical Requirements
 ⚠️ **MANDATORY**: All tests MUST use TagSource and TagType enums instead of hardcoded strings
+⚠️ **MANDATORY**: All test functions MUST have `@throws Throwable` annotation (not auto-enforced, manual review)
+⚠️ **MANDATORY**: All source methods that throw MUST have `@throws` annotation (auto-enforced by PHPStan)
 ⚠️ **REQUIRED**: 100% code coverage and 100% type coverage
 ⚠️ **REQUIRED**: PHPStan max level compliance
 

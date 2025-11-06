@@ -32,6 +32,8 @@ class Ortto extends Connector
 
     /**
      * Default headers for every request
+     *
+     * @throws InvalidArgumentException
      */
     protected function defaultHeaders(): array
     {
@@ -41,6 +43,9 @@ class Ortto extends Connector
         ];
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function person(): PersonResource
     {
         /** @var class-string<PersonResource> $class */
@@ -49,6 +54,9 @@ class Ortto extends Connector
         return new $class(connector: $this);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function account(): AccountResource
     {
         /** @var class-string<AccountResource> $class */
@@ -57,6 +65,9 @@ class Ortto extends Connector
         return new $class(connector: $this);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function accounts(): AccountsResource
     {
         /** @var class-string<AccountsResource> $class */
@@ -65,6 +76,9 @@ class Ortto extends Connector
         return new $class(connector: $this);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function activity(): ActivityResource
     {
         /** @var class-string<ActivityResource> $class */

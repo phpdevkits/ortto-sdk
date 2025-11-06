@@ -114,11 +114,13 @@ Returns an array of tag objects:
 - Optional `q` parameter in constructor
 - HasJsonBody trait with defaultBody() method
 - Only include `q` in body if provided (conditional)
+- **Add `@throws Throwable` annotation** (NOT automatically enforced by PHPStan for tests)
 
 ### Step 6: Create TagResource
 - Extend BaseResource
 - Implement `get(?string $q = null): Response` method
 - Send GetTags request via connector
+- **Add `@throws Throwable` annotation** (automatically enforced by PHPStan)
 
 ### Step 7: Update Ortto Connector
 - Add import for TagResource
@@ -128,6 +130,7 @@ Returns an array of tag objects:
 
 ### Step 8: Create Comprehensive Tests
 **MANDATORY: All tests MUST use enums instead of hardcoded strings**
+**MANDATORY: All test functions MUST have `@throws Throwable` annotation**
 
 - **TagSourceTest**: Verify all 4 enum values
 - **TagTypeTest**: Verify both enum values
@@ -136,15 +139,20 @@ Returns an array of tag objects:
   - Test with TagSource enum usage
   - Test with TagType enum usage
   - Test nullable fields
+  - **Each test function needs `@throws Throwable`**
 - **GetTagsTest**:
   - Test get all tags (no search)
   - Test get with search term
   - Use MockClient with fixtures
   - **Use TagSource/TagType enums in assertions**
+  - **Each test function needs `@throws Throwable`**
 - **TagResourceTest**:
   - Test resource get() method
   - Test with search parameter
   - **Use TagSource/TagType enums in test data**
+  - **Each test function needs `@throws Throwable`**
+
+**Note:** `@throws` annotations in tests are NOT automatically enforced by PHPStan (PEST syntax limitation). Must be checked manually during code review.
 
 ### Step 9: Run Tests and Record Fixtures
 - Run `composer test`
@@ -158,7 +166,9 @@ Returns an array of tag objects:
 - Run `composer test` one final time
 - Ensure all quality checks pass
 - Git add and commit with descriptive message
-- No Claude Code footer in commit message
+- **DO NOT include `Co-Authored-By` trailers**
+- **DO NOT include "Generated with Claude Code" or AI attribution**
+- Commits should appear as regular human contributions
 
 ## Key Requirements
 
@@ -179,9 +189,13 @@ Returns an array of tag objects:
 
 ### Testing
 - Use Saloon MockClient with auto-fixture recording
+- **NEVER create fixture files manually** - always let MockClient auto-record from real API calls
 - Test both success and edge cases
 - Use factories for test data generation
 - Enum usage in all test assertions
+- New tests placed **after** beforeEach/afterEach hooks but **before** older tests (reverse chronological)
+- Test files in `tests/Unit/Requests/Tag/` for request classes
+- Test files in `tests/Unit/Resources/` for resource classes
 
 ## Usage Example (After Implementation)
 

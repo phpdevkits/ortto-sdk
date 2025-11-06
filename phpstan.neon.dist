@@ -4,3 +4,9 @@ parameters:
         - src
 
     reportUnmatchedIgnoredErrors: true
+
+    exceptions:
+        check:
+            missingCheckedExceptionInThrows: true
+            tooWideThrowType: true
+        implicitThrows: false
