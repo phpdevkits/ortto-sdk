@@ -29,7 +29,9 @@
             "typeform",
             "zendesk",
             "geocode",
-            "coords"
+            "coords",
+            "zapier",
+            "cdp"
         ],
         "paths": [
             "docs"

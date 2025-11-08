@@ -38,6 +38,29 @@ vendor/bin/pest tests/Feature.php              # Run specific test file
 vendor/bin/pest --filter="test name"           # Run tests matching pattern
 ```
 
+## Implementation Strategy - Keep It Simple
+
+**One endpoint at a time:**
+1. Create the Request class only (with tests)
+2. Commit when tests pass
+3. THEN add Resource wrapper (with tests)
+4. Commit when tests pass
+5. THEN add Data classes IF needed for request/response (with tests)
+6. Commit when tests pass
+
+**Never:**
+- Create fixtures manually - MockClient auto-records them from real API calls
+- Implement everything in one go without testing each piece
+- Assume what's needed - ask when uncertain
+- Continue when confused - stop and ask for clarification
+
+**Always:**
+- Stop and ask when stuck or uncertain
+- Check similar existing code for patterns (e.g., if implementing GetTags, look at GetPeople)
+- Test each piece independently before moving to the next
+- When given a hint, re-read the relevant code to connect the dots before proceeding
+- Use direct property access on Data classes with public readonly properties (e.g., `$tag->name` not `$tag->toArray()['name']`)
+
 ## Architecture
 
 ### Saloon Integration
@@ -144,6 +167,21 @@ Applies the following preset rule sets to `src/` and `tests/`:
 - **Code coverage**: Exactly 100% required
 - **Type coverage**: Exactly 100% required
 - Tests written in PEST framework
+
+### PEST Test Assertions
+- **Chain expectations**: Multiple expectations should be chained together using `->and()` for cleaner, more readable tests
+- **Example**:
+  ```php
+  // Good - chained expectations
+  expect($tag->toArray()['name'])->toBe('My team')
+      ->and($tag->toArray()['type'])->toBe('')
+      ->and($tag->toArray()['subscribers'])->toBe(1);
+
+  // Bad - separate expect() calls
+  expect($tag->toArray()['name'])->toBe('My team');
+  expect($tag->toArray()['type'])->toBe('');
+  expect($tag->toArray()['subscribers'])->toBe(1);
+  ```
 
 ### Peck Typo Checking
 Ignored words: php, ortto, sdk, filesystems, favicon, js, integrations, testbench, asc, desc, param

@@ -7,6 +7,7 @@ use PhpDevKits\Ortto\Resources\AccountResource;
 use PhpDevKits\Ortto\Resources\AccountsResource;
 use PhpDevKits\Ortto\Resources\ActivityResource;
 use PhpDevKits\Ortto\Resources\PersonResource;
+use PhpDevKits\Ortto\Resources\TagResource;
 use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 
@@ -83,6 +84,17 @@ class Ortto extends Connector
     {
         /** @var class-string<ActivityResource> $class */
         $class = config()->string('ortto.resources.activity', ActivityResource::class);
+
+        return new $class(connector: $this);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function tag(): TagResource
+    {
+        /** @var class-string<TagResource> $class */
+        $class = config()->string('ortto.resources.tag', TagResource::class);
 
         return new $class(connector: $this);
     }
