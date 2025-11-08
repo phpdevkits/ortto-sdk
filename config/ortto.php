@@ -3,6 +3,7 @@
 use PhpDevKits\Ortto\Resources\AccountResource;
 use PhpDevKits\Ortto\Resources\AccountsResource;
 use PhpDevKits\Ortto\Resources\CampaignResource;
+use PhpDevKits\Ortto\Resources\KnowledgeBaseResource;
 use PhpDevKits\Ortto\Resources\PersonResource;
 use PhpDevKits\Ortto\Resources\TagResource;
 
@@ -31,6 +32,7 @@ return [
         'account' => AccountResource::class,
         'accounts' => AccountsResource::class,
         'campaign' => CampaignResource::class,
+        'knowledge_base' => KnowledgeBaseResource::class,
         'tag' => TagResource::class,
     ],
 
