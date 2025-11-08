@@ -1,5 +1,6 @@
 <?php
 
+use PhpDevKits\Ortto\Enums\ArticleStatus;
 use PhpDevKits\Ortto\Ortto;
 use PhpDevKits\Ortto\Requests\KnowledgeBase\GetArticles;
 use Saloon\Http\Faking\MockClient;
@@ -27,7 +28,24 @@ test('gets all articles',
             ->and($response->json())->toHaveKeys(['articles', 'total', 'offset', 'next_offset', 'has_more']);
     });
 
-test('gets articles with status filter',
+test('gets articles with status enum',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+        $mockClient = new MockClient([
+            GetArticles::class => MockResponse::fixture('knowledge-base/get_articles_status_on'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->send(new GetArticles(status: ArticleStatus::Published));
+
+        expect($response->status())->toBe(200)
+            ->and($response->json())->toBeArray();
+    });
+
+test('gets articles with status string',
     /**
      * @throws Throwable
      */

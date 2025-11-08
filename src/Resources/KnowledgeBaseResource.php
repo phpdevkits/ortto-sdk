@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpDevKits\Ortto\Resources;
 
+use PhpDevKits\Ortto\Enums\ArticleStatus;
 use PhpDevKits\Ortto\Requests\KnowledgeBase\GetArticle;
 use PhpDevKits\Ortto\Requests\KnowledgeBase\GetArticles;
 use Saloon\Http\BaseResource;
@@ -33,7 +34,7 @@ class KnowledgeBaseResource extends BaseResource
      *
      * Returns paginated list of articles with filtering and search capabilities.
      *
-     * @param  string|null  $status  Filter by article status: "on" (published), "off" (unpublished), or "" (all)
+     * @param  ArticleStatus|string|null  $status  Filter by article status
      * @param  string|null  $q  Search term to match against article titles or descriptions
      * @param  int|null  $limit  Number of articles per response (1-50, default: 50)
      * @param  int|null  $offset  Pagination offset for retrieving subsequent pages
@@ -41,7 +42,7 @@ class KnowledgeBaseResource extends BaseResource
      * @throws Throwable
      */
     public function getArticles(
-        ?string $status = null,
+        ArticleStatus|string|null $status = null,
         ?string $q = null,
         ?int $limit = null,
         ?int $offset = null,

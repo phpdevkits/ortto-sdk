@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpDevKits\Ortto\Requests\KnowledgeBase;
 
+use PhpDevKits\Ortto\Enums\ArticleStatus;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\PendingRequest;
@@ -17,13 +18,13 @@ class GetArticles extends Request implements HasBody
     protected Method $method = Method::POST;
 
     /**
-     * @param  string|null  $status  Filter by article status: "on" (published), "off" (unpublished), or "" (all)
+     * @param  ArticleStatus|string|null  $status  Filter by article status
      * @param  string|null  $q  Search term to match against article titles or descriptions
      * @param  int|null  $limit  Number of articles per response (1-50, default: 50)
      * @param  int|null  $offset  Pagination offset for retrieving subsequent pages
      */
     public function __construct(
-        protected ?string $status = null,
+        protected ArticleStatus|string|null $status = null,
         protected ?string $q = null,
         protected ?int $limit = null,
         protected ?int $offset = null,
@@ -46,7 +47,7 @@ class GetArticles extends Request implements HasBody
     protected function defaultBody(): array
     {
         return array_filter([
-            'status' => $this->status,
+            'status' => $this->status instanceof ArticleStatus ? $this->status->value : $this->status,
             'q' => $this->q,
             'limit' => $this->limit,
             'offset' => $this->offset,
