@@ -1,0 +1,12 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Sat, 08 Nov 2025 12:40:24 GMT",
+        "Content-Type": "application/json",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*"
+    },
+    "data": "{\"emails\":[{\"person_id\":\"507f1f77bcf86cd799439022\",\"contact_status\":\"created\",\"email_status\":\"queued\",\"message_id\":\"msg_0987654321fedcba\",\"email_name\":\"campaign-template-email\"}]}\n",
+    "context": []
+}

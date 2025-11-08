@@ -7,6 +7,7 @@ use PhpDevKits\Ortto\Resources\CampaignResource;
 use PhpDevKits\Ortto\Resources\KnowledgeBaseResource;
 use PhpDevKits\Ortto\Resources\PersonResource;
 use PhpDevKits\Ortto\Resources\TagResource;
+use PhpDevKits\Ortto\Resources\TransactionalResource;
 
 return [
 
@@ -36,6 +37,7 @@ return [
         'campaign' => CampaignResource::class,
         'knowledge_base' => KnowledgeBaseResource::class,
         'tag' => TagResource::class,
+        'transactional' => TransactionalResource::class,
     ],
 
 ];

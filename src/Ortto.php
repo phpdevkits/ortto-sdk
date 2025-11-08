@@ -11,6 +11,7 @@ use PhpDevKits\Ortto\Resources\CampaignResource;
 use PhpDevKits\Ortto\Resources\KnowledgeBaseResource;
 use PhpDevKits\Ortto\Resources\PersonResource;
 use PhpDevKits\Ortto\Resources\TagResource;
+use PhpDevKits\Ortto\Resources\TransactionalResource;
 use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 
@@ -131,6 +132,17 @@ class Ortto extends Connector
     {
         /** @var class-string<TagResource> $class */
         $class = config()->string('ortto.resources.tag', TagResource::class);
+
+        return new $class(connector: $this);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function transactional(): TransactionalResource
+    {
+        /** @var class-string<TransactionalResource> $class */
+        $class = config()->string('ortto.resources.transactional', TransactionalResource::class);
 
         return new $class(connector: $this);
     }
