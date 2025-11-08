@@ -31,7 +31,8 @@
             "geocode",
             "coords",
             "zapier",
-            "cdp"
+            "cdp",
+            "whatsapp"
         ],
         "paths": [
             "docs"

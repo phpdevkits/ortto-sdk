@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use PhpDevKits\Ortto\Resources\AccountResource;
 use PhpDevKits\Ortto\Resources\AccountsResource;
 use PhpDevKits\Ortto\Resources\ActivityResource;
+use PhpDevKits\Ortto\Resources\AssetResource;
 use PhpDevKits\Ortto\Resources\CampaignResource;
 use PhpDevKits\Ortto\Resources\KnowledgeBaseResource;
 use PhpDevKits\Ortto\Resources\PersonResource;
@@ -86,6 +87,17 @@ class Ortto extends Connector
     {
         /** @var class-string<ActivityResource> $class */
         $class = config()->string('ortto.resources.activity', ActivityResource::class);
+
+        return new $class(connector: $this);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function asset(): AssetResource
+    {
+        /** @var class-string<AssetResource> $class */
+        $class = config()->string('ortto.resources.asset', AssetResource::class);
 
         return new $class(connector: $this);
     }
