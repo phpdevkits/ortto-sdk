@@ -2,10 +2,10 @@
 
 namespace PhpDevKits\Ortto\Resources;
 
-use PhpDevKits\Ortto\Enums\ActivityTimeframe;
 use PhpDevKits\Ortto\Enums\FindStrategy;
 use PhpDevKits\Ortto\Enums\MergeStrategy;
 use PhpDevKits\Ortto\Enums\SortOrder;
+use PhpDevKits\Ortto\Enums\Timeframe;
 use PhpDevKits\Ortto\Requests\Person\ArchivePeople;
 use PhpDevKits\Ortto\Requests\Person\DeletePeople;
 use PhpDevKits\Ortto\Requests\Person\GetPeople;
@@ -58,7 +58,7 @@ class PersonResource extends BaseResource
         ?array $activities = null,
         ?int $limit = null,
         ?int $offset = null,
-        string|ActivityTimeframe|null $timeframe = null,
+        string|Timeframe|null $timeframe = null,
     ): Response {
         return $this->connector->send(
             request: new GetPersonActivities(

@@ -1,10 +1,10 @@
 <?php
 
 use PhpDevKits\Ortto\Data\PersonData;
-use PhpDevKits\Ortto\Enums\ActivityTimeframe;
 use PhpDevKits\Ortto\Enums\FindStrategy;
 use PhpDevKits\Ortto\Enums\MergeStrategy;
 use PhpDevKits\Ortto\Enums\PersonField;
+use PhpDevKits\Ortto\Enums\Timeframe;
 use PhpDevKits\Ortto\Ortto;
 use PhpDevKits\Ortto\Requests\Person\GetPersonActivities;
 use PhpDevKits\Ortto\Requests\Person\MergePeople;
@@ -115,7 +115,7 @@ test('gets activities with all parameters',
                     activities: ['act::o', 'act::c'],
                     limit: 20,
                     offset: 0,
-                    timeframe: ActivityTimeframe::Last7Days,
+                    timeframe: Timeframe::Last7Days,
                 ),
             );
 
@@ -173,7 +173,7 @@ test('gets activities with timeframe filter using enum',
             ->send(
                 new GetPersonActivities(
                     personId: $personId,
-                    timeframe: ActivityTimeframe::Last30Days,
+                    timeframe: Timeframe::Last30Days,
                 ),
             );
 

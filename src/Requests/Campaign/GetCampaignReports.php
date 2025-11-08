@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpDevKits\Ortto\Requests\Campaign;
 
-use PhpDevKits\Ortto\Enums\CampaignTimeframe;
+use PhpDevKits\Ortto\Enums\Timeframe;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\PendingRequest;
@@ -22,14 +22,14 @@ class GetCampaignReports extends Request implements HasBody
      * @param  string|null  $assetId  Specific asset, shape, or message within campaign
      * @param  string|null  $shapeId  Journey shape identifier for individual shape reports
      * @param  string|null  $messageId  Playbook email message identifier
-     * @param  CampaignTimeframe|string|null  $timeframe  Report data period
+     * @param  Timeframe|string|null  $timeframe  Report data period
      */
     public function __construct(
         protected ?string $campaignId = null,
         protected ?string $assetId = null,
         protected ?string $shapeId = null,
         protected ?string $messageId = null,
-        protected CampaignTimeframe|string|null $timeframe = null,
+        protected Timeframe|string|null $timeframe = null,
     ) {}
 
     public function resolveEndpoint(): string
@@ -61,7 +61,7 @@ class GetCampaignReports extends Request implements HasBody
         }
 
         if ($this->timeframe !== null) {
-            $body['timeframe'] = $this->timeframe instanceof CampaignTimeframe
+            $body['timeframe'] = $this->timeframe instanceof Timeframe
                 ? $this->timeframe->value
                 : $this->timeframe;
         }

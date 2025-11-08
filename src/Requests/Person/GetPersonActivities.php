@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpDevKits\Ortto\Requests\Person;
 
-use PhpDevKits\Ortto\Enums\ActivityTimeframe;
+use PhpDevKits\Ortto\Enums\Timeframe;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
@@ -24,7 +24,7 @@ class GetPersonActivities extends Request implements HasBody
         protected ?array $activities = null,
         protected ?int $limit = null,
         protected ?int $offset = null,
-        protected string|ActivityTimeframe|null $timeframe = null,
+        protected string|Timeframe|null $timeframe = null,
     ) {}
 
     public function resolveEndpoint(): string

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpDevKits\Ortto\Resources;
 
-use PhpDevKits\Ortto\Enums\CampaignTimeframe;
+use PhpDevKits\Ortto\Enums\Timeframe;
 use PhpDevKits\Ortto\Requests\Campaign\GetCampaignReports;
 use Saloon\Http\BaseResource;
 use Saloon\Http\Response;
@@ -22,7 +22,7 @@ class CampaignResource extends BaseResource
      * @param  string|null  $assetId  Specific asset, shape, or message within campaign
      * @param  string|null  $shapeId  Journey shape identifier for individual shape reports
      * @param  string|null  $messageId  Playbook email message identifier
-     * @param  CampaignTimeframe|string|null  $timeframe  Report data period
+     * @param  Timeframe|string|null  $timeframe  Report data period
      *
      * @throws Throwable
      */
@@ -31,7 +31,7 @@ class CampaignResource extends BaseResource
         ?string $assetId = null,
         ?string $shapeId = null,
         ?string $messageId = null,
-        CampaignTimeframe|string|null $timeframe = null,
+        Timeframe|string|null $timeframe = null,
     ): Response {
         return $this->connector->send(
             request: new GetCampaignReports(

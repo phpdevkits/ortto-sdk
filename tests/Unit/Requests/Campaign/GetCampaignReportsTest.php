@@ -1,6 +1,6 @@
 <?php
 
-use PhpDevKits\Ortto\Enums\CampaignTimeframe;
+use PhpDevKits\Ortto\Enums\Timeframe;
 use PhpDevKits\Ortto\Ortto;
 use PhpDevKits\Ortto\Requests\Campaign\GetCampaignReports;
 use Saloon\Http\Faking\MockClient;
@@ -43,7 +43,7 @@ test('gets journey campaign report with enum timeframe',
             ->send(
                 new GetCampaignReports(
                     campaignId: '690f248595fedf82f6732cb3',
-                    timeframe: CampaignTimeframe::Last14Days,
+                    timeframe: Timeframe::Last14Days,
                 ),
             );
 

@@ -1,6 +1,6 @@
 <?php
 
-use PhpDevKits\Ortto\Enums\CampaignTimeframe;
+use PhpDevKits\Ortto\Enums\Timeframe;
 use PhpDevKits\Ortto\Ortto;
 use PhpDevKits\Ortto\Requests\Campaign\GetCampaignReports;
 use Saloon\Http\Faking\MockClient;
@@ -45,7 +45,7 @@ test('getReports retrieves campaign report with all parameters',
                 assetId: 'asset123',
                 shapeId: 'shape123',
                 messageId: 'message123',
-                timeframe: CampaignTimeframe::Last14Days,
+                timeframe: Timeframe::Last14Days,
             );
 
         expect($response->status())->toBe(200);

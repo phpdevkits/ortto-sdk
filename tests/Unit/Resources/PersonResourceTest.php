@@ -1,9 +1,9 @@
 <?php
 
-use PhpDevKits\Ortto\Enums\ActivityTimeframe;
 use PhpDevKits\Ortto\Enums\FindStrategy;
 use PhpDevKits\Ortto\Enums\MergeStrategy;
 use PhpDevKits\Ortto\Enums\SortOrder;
+use PhpDevKits\Ortto\Enums\Timeframe;
 use PhpDevKits\Ortto\Ortto;
 use PhpDevKits\Ortto\Requests\Person\ArchivePeople;
 use PhpDevKits\Ortto\Requests\Person\DeletePeople;
@@ -135,7 +135,7 @@ test('activities gets person activities with all parameters',
                 activities: ['act::page-visited'],
                 limit: 10,
                 offset: 0,
-                timeframe: ActivityTimeframe::Last7Days,
+                timeframe: Timeframe::Last7Days,
             );
 
         expect($response->status())
