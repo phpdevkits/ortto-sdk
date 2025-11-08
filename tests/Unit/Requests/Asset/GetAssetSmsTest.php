@@ -1,7 +1,6 @@
 <?php
 
 use PhpDevKits\Ortto\Ortto;
-use PhpDevKits\Ortto\Requests\Asset\GetAssetHtml;
 use PhpDevKits\Ortto\Requests\Asset\GetAssetSms;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
@@ -10,26 +9,7 @@ beforeEach(function (): void {
     $this->ortto = new Ortto;
 });
 
-test('gets asset html',
-    /**
-     * @throws Throwable
-     */
-    function (): void {
-        $mockClient = new MockClient([
-            GetAssetHtml::class => MockResponse::fixture('asset/get_html'),
-        ]);
-
-        $response = $this->ortto
-            ->withMockClient($mockClient)
-            ->asset()
-            ->getHtml(assetId: '690f250ebe8b42033b352de2');
-
-        expect($response->status())->toBe(200)
-            ->and($response->json())->toBeArray()
-            ->and($response->json())->toHaveKeys(['html', 'from_email', 'from_name', 'subject', 'preview', 'reply_to']);
-    });
-
-test('gets sms asset',
+test('gets sms asset by id',
     /**
      * @throws Throwable
      */
@@ -40,15 +20,14 @@ test('gets sms asset',
 
         $response = $this->ortto
             ->withMockClient($mockClient)
-            ->asset()
-            ->getSms(assetId: '690f37fa0ebf85582e1f98b4');
+            ->send(new GetAssetSms(assetId: '690f37fa0ebf85582e1f98b4'));
 
         expect($response->status())->toBe(200)
             ->and($response->json())->toBeArray()
             ->and($response->json())->toHaveKeys(['encoding', 'chars_count', 'segments', 'body', 'mapped_links']);
     });
 
-test('gets sms asset with parameters',
+test('gets sms asset with all parameters',
     /**
      * @throws Throwable
      */
@@ -59,13 +38,13 @@ test('gets sms asset with parameters',
 
         $response = $this->ortto
             ->withMockClient($mockClient)
-            ->asset()
-            ->getSms(
+            ->send(new GetAssetSms(
                 assetId: '690f37fa0ebf85582e1f98b4',
+                contactId: null,
                 showFallbacks: true,
                 raw: false,
                 usePublished: false,
-            );
+            ));
 
         expect($response->status())->toBe(200)
             ->and($response->json())->toBeArray();

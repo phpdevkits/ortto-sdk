@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Sat, 08 Nov 2025 12:34:42 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "411",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"encoding\":\"ucs2\",\"chars_count\":236,\"segments\":4,\"body\":\"Between Dynamic: Hi Darron! Thanks for subscribing to our \ud83c\udd93 trial. You can get started using our guides or book a demo session with one of our Customer Support specialists: https:\/\/opteul.ink\/2jymoAE\\n\\nOpt out: https:\/\/opteul.ink\/YNqmoAA\",\"mapped_links\":{\"https:\/\/opteul.ink\/2jymoAE\":\"--survey--\"},\"remove_opt_out\":false,\"can_remove_opt_out\":false}\n",
+    "context": []
+}
