@@ -2,10 +2,14 @@
 
 use PhpDevKits\Ortto\Data\EmailAssetData;
 use PhpDevKits\Ortto\Data\EmailRecipientData;
+use PhpDevKits\Ortto\Data\PushAssetData;
+use PhpDevKits\Ortto\Data\PushNotificationData;
 use PhpDevKits\Ortto\Enums\MergeStrategy;
 use PhpDevKits\Ortto\Enums\PersonField;
+use PhpDevKits\Ortto\Enums\PushPlatform;
 use PhpDevKits\Ortto\Ortto;
 use PhpDevKits\Ortto\Requests\Transactional\SendEmail;
+use PhpDevKits\Ortto\Requests\Transactional\SendPush;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 
@@ -109,4 +113,33 @@ test('sends email via transactional resource with asset reference',
         expect($response->status())->toBe(200)
             ->and($response->json())->toBeArray()
             ->and($response->json())->toHaveKey('emails');
+    });
+
+test('sends push via transactional resource',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+        $mockClient = new MockClient([
+            SendPush::class => MockResponse::fixture('transactional/send_push'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->transactional()
+            ->sendPush(
+                pushes: [
+                    new PushNotificationData(
+                        asset: new PushAssetData(
+                            pushName: 'order-update',
+                            title: 'Your order shipped!',
+                            message: 'Your order is on the way',
+                            platforms: [PushPlatform::Web, PushPlatform::Ios],
+                        ),
+                        contactId: 'contact123',
+                    ),
+                ],
+            );
+
+        expect($response->status())->toBe(202);
     });

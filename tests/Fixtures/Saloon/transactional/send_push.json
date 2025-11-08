@@ -1,0 +1,16 @@
+{
+    "statusCode": 202,
+    "headers": {
+        "Date": "Sat, 08 Nov 2025 12:53:41 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "144",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"pushes\":[{\"push_name\":\"order-update\",\"message_id\":\"50690f3d549433e4ddf58e8d\",\"push_status\":\"queued\",\"person_id\":\"22636f6e7461637431323322\"}]}\n",
+    "context": []
+}

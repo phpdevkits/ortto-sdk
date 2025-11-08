@@ -6,9 +6,11 @@ namespace PhpDevKits\Ortto\Resources;
 
 use PhpDevKits\Ortto\Data\EmailAssetData;
 use PhpDevKits\Ortto\Data\EmailRecipientData;
+use PhpDevKits\Ortto\Data\PushNotificationData;
 use PhpDevKits\Ortto\Enums\FindStrategy;
 use PhpDevKits\Ortto\Enums\MergeStrategy;
 use PhpDevKits\Ortto\Requests\Transactional\SendEmail;
+use PhpDevKits\Ortto\Requests\Transactional\SendPush;
 use Saloon\Http\BaseResource;
 use Saloon\Http\Response;
 use Throwable;
@@ -54,6 +56,26 @@ class TransactionalResource extends BaseResource
                 assetId: $assetId,
                 findStrategy: $findStrategy,
                 skipNonExisting: $skipNonExisting,
+            ),
+        );
+    }
+
+    /**
+     * Send transactional push notifications to users.
+     *
+     * @param  array<int, PushNotificationData|array<string, mixed>>  $pushes  Array of push notification objects
+     * @param  bool  $async  Controls synchronous/asynchronous processing
+     *
+     * @throws Throwable
+     */
+    public function sendPush(
+        array $pushes,
+        bool $async = false,
+    ): Response {
+        return $this->connector->send(
+            request: new SendPush(
+                pushes: $pushes,
+                async: $async,
             ),
         );
     }
