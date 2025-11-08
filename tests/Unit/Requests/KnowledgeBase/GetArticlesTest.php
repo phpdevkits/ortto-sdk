@@ -1,7 +1,6 @@
 <?php
 
 use PhpDevKits\Ortto\Ortto;
-use PhpDevKits\Ortto\Requests\KnowledgeBase\GetArticle;
 use PhpDevKits\Ortto\Requests\KnowledgeBase\GetArticles;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
@@ -21,47 +20,60 @@ test('gets all articles',
 
         $response = $this->ortto
             ->withMockClient($mockClient)
-            ->knowledgeBase()
-            ->getArticles();
+            ->send(new GetArticles);
 
         expect($response->status())->toBe(200)
             ->and($response->json())->toBeArray()
             ->and($response->json())->toHaveKeys(['articles', 'total', 'offset', 'next_offset', 'has_more']);
     });
 
-test('gets articles with filters',
+test('gets articles with status filter',
     /**
      * @throws Throwable
      */
     function (): void {
         $mockClient = new MockClient([
-            GetArticles::class => MockResponse::fixture('knowledge-base/get_articles_filtered'),
+            GetArticles::class => MockResponse::fixture('knowledge-base/get_articles_status_on'),
         ]);
 
         $response = $this->ortto
             ->withMockClient($mockClient)
-            ->knowledgeBase()
-            ->getArticles(status: 'on', q: 'first', limit: 10, offset: 0);
+            ->send(new GetArticles(status: 'on'));
 
         expect($response->status())->toBe(200)
             ->and($response->json())->toBeArray();
     });
 
-test('gets knowledge base article by id',
+test('gets articles with search query',
     /**
      * @throws Throwable
      */
     function (): void {
         $mockClient = new MockClient([
-            GetArticle::class => MockResponse::fixture('knowledge-base/get_article'),
+            GetArticles::class => MockResponse::fixture('knowledge-base/get_articles_search'),
         ]);
 
         $response = $this->ortto
             ->withMockClient($mockClient)
-            ->knowledgeBase()
-            ->getArticle(id: '690f2b469159dd51dee50960');
+            ->send(new GetArticles(q: 'first'));
 
         expect($response->status())->toBe(200)
-            ->and($response->json())->toBeArray()
-            ->and($response->json())->toHaveKeys(['id', 'title', 'description', 'html']);
+            ->and($response->json())->toBeArray();
+    });
+
+test('gets articles with pagination',
+    /**
+     * @throws Throwable
+     */
+    function (): void {
+        $mockClient = new MockClient([
+            GetArticles::class => MockResponse::fixture('knowledge-base/get_articles_pagination'),
+        ]);
+
+        $response = $this->ortto
+            ->withMockClient($mockClient)
+            ->send(new GetArticles(limit: 10, offset: 0));
+
+        expect($response->status())->toBe(200)
+            ->and($response->json())->toBeArray();
     });

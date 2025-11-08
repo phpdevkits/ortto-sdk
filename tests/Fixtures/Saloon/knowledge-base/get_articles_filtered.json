@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Sat, 08 Nov 2025 11:50:46 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "202",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"articles\":[{\"id\":\"690f2b469159dd51dee50960\",\"title\":\"Our first article\",\"description\":\"This is the description\",\"slug\":\"a-1-our-first-article\"}],\"total\":1,\"offset\":0,\"next_offset\":1,\"has_more\":false}\n",
+    "context": []
+}

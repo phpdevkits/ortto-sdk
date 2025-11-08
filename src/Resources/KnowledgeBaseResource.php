@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpDevKits\Ortto\Resources;
 
 use PhpDevKits\Ortto\Requests\KnowledgeBase\GetArticle;
+use PhpDevKits\Ortto\Requests\KnowledgeBase\GetArticles;
 use Saloon\Http\BaseResource;
 use Saloon\Http\Response;
 use Throwable;
@@ -24,6 +25,34 @@ class KnowledgeBaseResource extends BaseResource
     {
         return $this->connector->send(
             request: new GetArticle(id: $id),
+        );
+    }
+
+    /**
+     * Retrieve multiple or all knowledge base articles.
+     *
+     * Returns paginated list of articles with filtering and search capabilities.
+     *
+     * @param  string|null  $status  Filter by article status: "on" (published), "off" (unpublished), or "" (all)
+     * @param  string|null  $q  Search term to match against article titles or descriptions
+     * @param  int|null  $limit  Number of articles per response (1-50, default: 50)
+     * @param  int|null  $offset  Pagination offset for retrieving subsequent pages
+     *
+     * @throws Throwable
+     */
+    public function getArticles(
+        ?string $status = null,
+        ?string $q = null,
+        ?int $limit = null,
+        ?int $offset = null,
+    ): Response {
+        return $this->connector->send(
+            request: new GetArticles(
+                status: $status,
+                q: $q,
+                limit: $limit,
+                offset: $offset,
+            ),
         );
     }
 }
