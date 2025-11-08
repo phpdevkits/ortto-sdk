@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Sat, 08 Nov 2025 11:24:47 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "108",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"campaigns\":[],\"meta\":{\"total_campaigns\":0,\"total_active_campaigns\":0},\"today\":\"Sat Nov 08 2025 10:24 PM\"}\n",
+    "context": []
+}
