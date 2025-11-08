@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Sat, 08 Nov 2025 11:11:07 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "1654",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"created_at\":\"0001-01-01T00:00:00Z\",\"precision\":\"days\",\"timeframe\":{\"type\":\"last-14-days\",\"custom_from\":{\"year\":0,\"month\":0,\"day\":0,\"timezone\":\"UTC\"},\"custom_to\":{\"year\":0,\"month\":0,\"day\":0,\"timezone\":\"UTC\"}},\"reports\":{\"performance\":{\"name\":\"Journey performance\",\"entered\":0,\"in_journey\":0,\"exited\":0,\"revenue\":0,\"conversions\":0,\"graph\":{\"name\":\"Journey performance\",\"chart_type\":\"stacked-column\",\"from\":\"2025-11-08T11:07:49.569Z\",\"to\":\"2025-11-08T23:59:59.000000999Z\",\"timezone\":\"Europe\/Lisbon\",\"timeframe\":{\"type\":\"last-14-days\",\"custom_from\":{\"year\":0,\"month\":0,\"day\":0,\"timezone\":\"UTC\"},\"custom_to\":{\"year\":0,\"month\":0,\"day\":0,\"timezone\":\"UTC\"}},\"time_precision\":\"days\",\"is_cumulative\":true,\"snapshot\":{\"graph\":[{\"t\":\"20251108\",\"v\":{\"0\":0,\"1\":0}}],\"legend\":[{\"label\":\"Entered\",\"type\":\"integer\"},{\"label\":\"Exited\",\"type\":\"integer\"}]},\"unique_snapshot\":{\"graph\":null,\"legend\":null}}},\"reactions\":{\"name\":\"Reactions\",\"graph\":{\"angry\":0,\"dislike\":0,\"like\":0,\"love\":0,\"ok\":0},\"sentiment\":{\"sentiment\":\"\",\"ratio\":0,\"positive\":0,\"negative\":0,\"neutral\":0},\"latest_reactions\":[]},\"replies\":{\"name\":\"Replies\",\"latest_replies\":[]},\"products\":{\"name\":\"Products sold from this campaign\",\"items\":[]},\"revenue\":{\"name\":\"Attributed orders and revenue\",\"conversions\":0,\"clicked\":0,\"opened\":0,\"unique_clicked\":0,\"unique_clicked_raw\":0,\"unique_clicked_base\":0,\"unique_delivered\":0,\"unique_opened\":0,\"delivered\":0,\"revenue\":0,\"bounced\":0,\"invalid\":0,\"failed\":0,\"asp\":0},\"redeemed_coupons\":{\"name\":\"Coupon redemption from this campaign\",\"redeemed_coupons\":[]}},\"attribution_model\":\"\",\"last_updated\":\"2025-11-08T11:11:07.37255823Z\",\"report_type\":\"\",\"attr_model\":\"last\"}\n",
+    "context": []
+}

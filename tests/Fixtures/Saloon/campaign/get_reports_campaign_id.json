@@ -1,0 +1,16 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Sat, 08 Nov 2025 11:01:29 GMT",
+        "Content-Type": "application\/json",
+        "Content-Length": "270",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Origin": "*",
+        "Allow": "GET, POST, PUT, DELETE, OPTIONS",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "X-Version": "master-2511042321-1782-f1477bc"
+    },
+    "data": "{\"last_updated\":\"0001-01-01T00:00:00Z\",\"timeframe\":{\"type\":\"\",\"custom_from\":{\"year\":0,\"month\":0,\"day\":0,\"timezone\":\"UTC\"},\"custom_to\":{\"year\":0,\"month\":0,\"day\":0,\"timezone\":\"UTC\"}},\"precision\":\"\",\"report_type\":\"\",\"attr_model\":\"\",\"reports\":null,\"report_content_type\":\"\"}\n",
+    "context": []
+}
