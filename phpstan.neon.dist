@@ -8,5 +8,5 @@ parameters:
     exceptions:
         check:
             missingCheckedExceptionInThrows: true
-            tooWideThrowType: true
+            tooWideThrowType: false
         implicitThrows: false
