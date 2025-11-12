@@ -46,7 +46,7 @@ test('subscribes people to audience',
             ->withMockClient($mockClient)
             ->send(
                 new MergePeople(
-                    people: $peopleData->toArray(),
+                    people: array_map(fn (PersonData $person): array => $person->toArray(), $peopleData),
                     mergeBy: [PersonField::Email],
                     mergeStrategy: MergeStrategy::OverwriteExisting,
                     findStrategy: FindStrategy::All,

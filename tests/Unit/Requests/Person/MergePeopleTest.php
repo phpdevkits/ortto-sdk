@@ -30,7 +30,7 @@ test('merges multiple people in bulk',
             ->withMockClient($mockClient)
             ->send(
                 new MergePeople(
-                    people: $people->toArray(),
+                    people: array_map(fn (PersonData $person): array => $person->toArray(), $people),
                     mergeBy: ['str::email'],
                     mergeStrategy: MergeStrategy::OverwriteExisting->value,
                     findStrategy: FindStrategy::All->value,

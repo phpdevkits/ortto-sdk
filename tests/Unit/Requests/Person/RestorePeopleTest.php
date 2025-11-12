@@ -38,7 +38,7 @@ test('restores archived people with inclusion ids',
             ->withMockClient($mockClient)
             ->send(
                 new MergePeople(
-                    people: $peopleData->toArray(),
+                    people: array_map(fn (PersonData $person): array => $person->toArray(), $peopleData),
                     mergeBy: [PersonField::Email],
                     mergeStrategy: MergeStrategy::OverwriteExisting,
                     findStrategy: FindStrategy::All,
@@ -95,7 +95,7 @@ test('restores all archived contacts with bulk flag',
             ->withMockClient($mockClient)
             ->send(
                 new MergePeople(
-                    people: $peopleData->toArray(),
+                    people: array_map(fn (PersonData $person): array => $person->toArray(), $peopleData),
                     mergeBy: [PersonField::Email],
                     mergeStrategy: MergeStrategy::OverwriteExisting,
                     findStrategy: FindStrategy::All,
@@ -160,7 +160,7 @@ test('restores with exclusions',
             ->withMockClient($mockClient)
             ->send(
                 new MergePeople(
-                    people: $peopleData->toArray(),
+                    people: array_map(fn (PersonData $person): array => $person->toArray(), $peopleData),
                     mergeBy: [PersonField::Email],
                     mergeStrategy: MergeStrategy::OverwriteExisting,
                     findStrategy: FindStrategy::All,

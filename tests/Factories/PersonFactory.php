@@ -4,43 +4,32 @@ declare(strict_types=1);
 
 namespace Tests\Factories;
 
-use Carbon\CarbonImmutable;
+use DateTimeImmutable;
+use FBarrento\DataFactory\Factory;
 use Illuminate\Support\Str;
 use PhpDevKits\Ortto\Data\PersonData;
 
-use function fake;
-
 /**
- * @extends BaseFactory<PersonData>
+ * @extends Factory<PersonData>
  */
-final class PersonFactory extends BaseFactory
+final class PersonFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding data object.
-     *
-     * @var class-string<PersonData>
-     */
-    protected $model = PersonData::class;
+    protected string $dataObject = PersonData::class;
 
     public function definition(): array
     {
         return [
-            'id' => Str::uuid()->toString(),
-            'email' => fake()->unique()->email(),
-            'firstName' => fake()->firstName(),
-            'lastName' => fake()->lastName(),
-            'name' => fake()->name(),
-            'city' => fake()->city(),
-            'country' => fake()->country(),
-            'postalCode' => fake()->postcode(),
-            'birthdate' => CarbonImmutable::now(),
-            'emailPermission' => fake()->boolean(),
-            'smsPermission' => fake()->boolean(),
+            'id' => fn () => Str::uuid()->toString(),
+            'email' => fn () => $this->fake->unique()->email(),
+            'firstName' => fn () => $this->fake->firstName(),
+            'lastName' => fn () => $this->fake->lastName(),
+            'name' => fn () => $this->fake->name(),
+            'city' => fn () => $this->fake->city(),
+            'country' => fn () => $this->fake->country(),
+            'postalCode' => fn () => $this->fake->postcode(),
+            'birthdate' => fn () => new DateTimeImmutable,
+            'emailPermission' => fn () => $this->fake->boolean(),
+            'smsPermission' => fn () => $this->fake->boolean(),
         ];
-    }
-
-    protected function createDataObject(array $attributes): PersonData
-    {
-        return new PersonData(...$attributes);
     }
 }

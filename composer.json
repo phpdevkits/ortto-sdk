@@ -23,6 +23,7 @@
         "saloonphp/saloon": "^3.0"
     },
     "require-dev": {
+        "fbarrento/data-factory": "^1.1",
         "jonpurvis/lawman": "^4.1",
         "laravel/pint": "^1.24.0",
         "orchestra/testbench": "^10.6",

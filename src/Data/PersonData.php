@@ -4,18 +4,28 @@ declare(strict_types=1);
 
 namespace PhpDevKits\Ortto\Data;
 
-use Carbon\CarbonImmutable;
+use FBarrento\DataFactory\Concerns\HasDataFactory;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Collection;
 use Tests\Factories\PersonFactory;
-
-use function collect;
 
 /**
  * @implements Arrayable<string, mixed>
+ *
+ * @phpstan-use HasDataFactory<PersonFactory>
  */
 class PersonData implements Arrayable
 {
+    /** @use HasDataFactory<PersonFactory> */
+    use HasDataFactory;
+
+    /**
+     * Create a new factory instance for the data class.
+     */
+    protected static function newFactory(): PersonFactory
+    {
+        return new PersonFactory;
+    }
+
     public function __construct(
         public string|int $id,
         public string $email,
@@ -25,18 +35,10 @@ class PersonData implements Arrayable
         public ?string $city = null,
         public ?string $country = null,
         public ?string $postalCode = null,
-        public ?CarbonImmutable $birthdate = null,
+        public ?\DateTimeImmutable $birthdate = null,
         public bool $emailPermission = false,
         public bool $smsPermission = false,
     ) {}
-
-    /**
-     * Create a new factory instance.
-     */
-    public static function factory(): PersonFactory
-    {
-        return PersonFactory::new();
-    }
 
     /**
      * Get the instance as an array.
@@ -61,22 +63,13 @@ class PersonData implements Arrayable
                 ],
                 'str::postal' => $this->postalCode,
                 'dtz::b' => [
-                    'year' => $this->birthdate?->year,
-                    'month' => $this->birthdate?->month,
-                    'day' => $this->birthdate?->day,
+                    'year' => $this->birthdate instanceof \DateTimeImmutable ? (int) $this->birthdate->format('Y') : null,
+                    'month' => $this->birthdate instanceof \DateTimeImmutable ? (int) $this->birthdate->format('m') : null,
+                    'day' => $this->birthdate instanceof \DateTimeImmutable ? (int) $this->birthdate->format('d') : null,
                     'timezone' => $this->birthdate?->getTimezone()->getName(),
                 ],
                 'bol::p' => $this->emailPermission,
                 'bol::sp' => $this->smsPermission,
             ]];
-    }
-
-    /**
-     * @param  array<int, PersonData>  $items
-     * @return Collection<int, PersonData>
-     */
-    public function newCollection(array $items = []): Collection
-    {
-        return collect($items);
     }
 }

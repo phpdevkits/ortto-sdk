@@ -2,16 +2,16 @@
 
 use PhpDevKits\Ortto\Data\PersonData;
 
-test('creates new collection',
+test('creates person via factory',
     function (): void {
         $person = PersonData::factory()->make();
 
-        $collection = $person->newCollection();
-
-        expect($collection)
-            ->toBeInstanceOf(\Illuminate\Support\Collection::class)
-            ->and($collection->isEmpty())
-            ->toBeTrue();
+        expect($person)
+            ->toBeInstanceOf(PersonData::class)
+            ->and($person->email)
+            ->toBeString()
+            ->and($person->id)
+            ->not()->toBeEmpty();
     });
 
 test('converts to array with ortto field format',
